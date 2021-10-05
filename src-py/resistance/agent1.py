@@ -82,16 +82,16 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         #nothing to do here
         pass
 
-    def round_outcome(self, rounds_complete, missions_failed):
+    def round_outcome(self, rounds_complete, missions_failed): # Could implement if missions_failed == 2, and Agent is spy, always fail mission, as will always result in win
         '''
         basic informative function, where the parameters indicate:
         rounds_complete, the number of rounds (0-5) that have been completed
-        missions_failed, the numbe of missions (0-3) that have failed.
+        missions_failed, the number of missions (0-3) that have failed.
         '''
         #nothing to do here
         pass
     
-    def game_outcome(self, spies_win, spies):
+    def game_outcome(self, spies_win, spies): # Could save info about the spies for future games?
         '''
         basic informative function, where the parameters indicate:
         spies_win, True iff the spies caused 3+ missions to fail

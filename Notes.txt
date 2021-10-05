@@ -1,0 +1,54 @@
+Suspicious Actions:
+Being on a mission which failed, chance of being a spy (if 3 on mission and 1 fail card, 33% chance of being spy)
+Proposing a mission that fails, chance of being a spy (if proposer knew there were spies on the mission, they could be a spy, could also be an accident)
+Voting yes for a mission which failed, chance of being a spy (if voter knew that there are spies on the mission, they could be a spy)
+Voting no for a mission which succeeds, chance of being a spy (if voter knew that there are no spies on the misison, they could be a spy 
+                                                                                                                    (as the mission would be a success for the resistence))
+
+Non-Suspicious Actions:
+Being on a misison that succeeds, less chance of being a spy (Lower chance of being spy if mission passes, as a spy would be unlikely to let the resistence get a point)
+Proposing a misison that succeeds, less chance of being a spy (Either they suspected no mission members to be spies, or maybe the spies decided not to sabotage)
+Voting no for a mission which fails, less chance of being a spy (Likely suspected that there are spies on the mission, voting no indicates resistence)
+Voting yes for a mission that succeeds, less chance of being a spy (Likely suspected that there are no spies on the mission, indicates resistence)
+
+depending on number of players results in the number of spies in a game
+spy_count = {5:2, 6:2, 7:3, 8:3, 9:3, 10:4}
+
+each game should have a set of spy combinations with a probability value, all values should be equal at the start of a game
+a spy combination should be a set of names of agents equal to the number of spies present in a given game size
+in a game of 7 players, there should be a set of spy combinations in which every combination of 3 agents occurs
+eg agents1-agents7
+
+set of all spy combinations in a game with 7 players and 3 spies, each agent labelled 1-7
+35 different combinations of agents
+1,2,3   2,3,4   3,4,5   4,5,6   5,6,7
+1,2,4   2,3,5   3,4,6   4,5,7
+1,2,5   2,3,6   3,4,7   4,6,7
+1,2,6   2,3,7   3,5,6
+1,2,7   2,4,5   3,5,7
+1,3,4   2,4,6   3,6,7
+1,3,5   2,4,7 
+1,3,6   2,5,6
+1,3,7   2,5,7
+1,4,5   2,6,7
+1,4,6
+1,4,7
+1,5,6
+1,5,7
+1,6,7
+
+5 players = 2 spies = 10 combinations 
+6 players = 2 spies = 15 combinations
+7 players = 3 spies = 35 combinations
+8 players = 3 spies = 56 combinations
+9 players = 3 spies = 84 combinations
+10 players = 4 spies = 210 combinations
+
+each combination has an equal chance of being true at the start of the game, The probability of a combination being true changes as the game progresses.
+if an agent does something suspicious, the probability of all combinations involving that spy increases.
+if an agent does something non-suspicious, the probability of all combinations involving that spy decreases.
+
+If resistence, reduce the number of suspicious agents on a mission, do not propose them on a mission together, and do not vote for them on a mission, 
+    eg if set 2,5,7 is suspected to be spies, do not vote for missions containing these members
+
+Majority of votes yes needed to approve mission, draw of votes or majority no does not approve the mission
