@@ -3,13 +3,26 @@ Being on a mission which failed, chance of being a spy (if 3 on mission and 1 fa
 Proposing a mission that fails, chance of being a spy (if proposer knew there were spies on the mission, they could be a spy, could also be an accident)
 Voting yes for a mission which failed, chance of being a spy (if voter knew that there are spies on the mission, they could be a spy)
 Voting no for a mission which succeeds, chance of being a spy (if voter knew that there are no spies on the misison, they could be a spy 
-                                                                                                                    (as the mission would be a success for the resistence))
+                                                                                                                    (as the mission would be a success for the resistance))
+Voting no when on a mission with certain people (spies want to avoid sending multiple on the same mission to avoid 2 fail votes)
+Another player voting differently to yourself (assuming our agent is making an informed decision based on what we already know)
+
 
 Non-Suspicious Actions:
 Being on a misison that succeeds, less chance of being a spy (Lower chance of being spy if mission passes, as a spy would be unlikely to let the resistence get a point)
 Proposing a misison that succeeds, less chance of being a spy (Either they suspected no mission members to be spies, or maybe the spies decided not to sabotage)
 Voting no for a mission which fails, less chance of being a spy (Likely suspected that there are spies on the mission, voting no indicates resistence)
 Voting yes for a mission that succeeds, less chance of being a spy (Likely suspected that there are no spies on the mission, indicates resistence)
+
+Proposing Missions:
+As resistance member:
+If first round: choose yourself, and the people next in line to be leader (if all are not spy, then next few people should propose the same 3 - (might not work well if some of the other agents playing are making random moves early)). If they don't, or some agents vote no to proposition, they could be a spy
+Other rounds: choose least suspicious people based on combination value
+
+As spy:
+Always include 1 spy, try to choose spies that haven't done anything suspicious
+Choose spies that have been on missions already but haven't failed them
+
 
 depending on number of players results in the number of spies in a game
 spy_count = {5:2, 6:2, 7:3, 8:3, 9:3, 10:4}
