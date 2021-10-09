@@ -23,7 +23,6 @@ As spy:
 Always include 1 spy, try to choose spies that haven't done anything suspicious
 Choose spies that have been on missions already but haven't failed them
 
-
 depending on number of players results in the number of spies in a game
 spy_count = {5:2, 6:2, 7:3, 8:3, 9:3, 10:4}
 
