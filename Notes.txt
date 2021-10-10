@@ -33,6 +33,7 @@ eg agents1-agents7
 
 set of all spy combinations in a game with 7 players and 3 spies, each agent labelled 1-7
 35 different combinations of agents
+if player 1 is you and you are not a spy, 15/35 combinations are impossible, each other combination has a 1/20 chance of being true, or 5%
 1,2,3   2,3,4   3,4,5   4,5,6   5,6,7
 1,2,4   2,3,5   3,4,6   4,5,7
 1,2,5   2,3,6   3,4,7   4,6,7
@@ -49,7 +50,13 @@ set of all spy combinations in a game with 7 players and 3 spies, each agent lab
 1,5,7
 1,6,7
 
-5 players = 2 spies = 10 combinations 
+5 players = 2 spies = 10 combinations
+if 0 is you and you are not a spy, 4/10 combinations are impossible, each other combination has a 1/6 chance of being true, or 16.67%
+0,1     1,2     2,3     3,4
+0,2     1,3     2,4
+0,3     1,4
+0,4
+
 6 players = 2 spies = 15 combinations
 7 players = 3 spies = 35 combinations
 8 players = 3 spies = 56 combinations
