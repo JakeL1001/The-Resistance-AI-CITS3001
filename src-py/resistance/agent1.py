@@ -68,6 +68,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         for key, value in self.worlds.items():
                 self.worlds[key] = startingChance
         
+        print(self.worlds)
         self.order_worlds()
         
     def order_worlds(self):
