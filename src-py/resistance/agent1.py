@@ -34,6 +34,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         
         # print(number_of_players)
         # print(player_number)
+        # Set worlds containing self to INVALID if self is not a spy
         if self.spy_count[number_of_players] == 2:
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
@@ -59,21 +60,28 @@ class Agent1(Agent): #TODO Rename based on algorithm used
                             else:
                                 self.worlds[(x,y,z,w)] = "VALID"
 
+        # update the list of worlds to remove invalid worlds
         temp = self.worlds.copy()
         for key, value in self.worlds.items():
             if value == "INVALID":
                 temp.pop(key)
         self.worlds = temp.copy()
+
+        # set the starting chance of a world being true to the same value
         startingChance = 1/len(self.worlds)
         for key, value in self.worlds.items():
                 self.worlds[key] = startingChance
         
+        # order worlds by likelihood of being true
         self.order_worlds()
         
     def order_worlds(self):
         self.worlds = {x: y for x, y in sorted(self.worlds.items(), key=lambda item: item[1], reverse=True)}
         # Re-orders the list of agents in descending order of most likely to be spies, so first element is most likely to be spy
         # list(self.probabilities)[0] would return the first element of the list of suspicion, which is the player with the highest suspicion
+
+    def calculate_probabilities(self):
+        pass
 
     def is_spy(self): # returns True iff the agent is a spy
         return self.player_number in self.spy_list
@@ -161,6 +169,37 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         and mission_success is True if there were not enough betrayals to cause the mission to fail, False otherwise.
         It iss not expected or required for this function to return anything.
         '''
+        # if the mission fails, then the world probabilities can be updated
+        if not mission_success:
+            fail_chance = self.worlds.copy() # this dictionary will store the P(F|C) values
+            for combination in fail_chance:
+                overlap = set(combination)&set(mission)
+                if betrayals == 1:
+                    fail_chance[combination] = 1 - 0.5**len(overlap)
+                    #if len(overlap) == 0:
+                    #    fail_chance[combination] = 0
+                    #elif len(overlap) == 1:
+                    #    fail_chance[combination] = 0.5 # set chance for spy to fail mission
+                    #elif len(overlap) == 2:
+                    #    fail_chance[combination] = 1 - 0.5**2
+                    #elif len(overlap) == 3:
+                    #    fail_chance[combination] = 1 - 0.5**3
+                    #elif len(overlap) == 4: # there can be at most 4 spies in a game
+                    #    fail_chance[combination] = 1 - 0.5**4
+                elif betrayals == 2:
+                    if len(overlap) == 0:
+                        fail_chance[combination] = 0
+                    elif len(overlap) == 1:
+                        fail_chance[combination] = 0 
+                    elif len(overlap) == 2:
+                        fail_chance[combination] = 1 - 0.5^2
+                    elif len(overlap) == 3:
+                        fail_chance[combination] = 1 - 0.5^3
+                    elif len(overlap) == 4:
+                        fail_chance[combination] = 1 - 0.5^4           
+                    
+
+
         #nothing to do here
         pass
 
