@@ -26,6 +26,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         number_of_players, the player_number (an id number for the agent in the game),
         and a list of agent indexes which are the spies, if the agent is a spy, or empty otherwise
         '''
+        print("New game: ", number_of_players, player_number, spy_list)
         self.spy_count = {5:2, 6:2, 7:3, 8:3, 9:3, 10:4}
         self.number_of_players = number_of_players
         self.player_number = player_number
@@ -65,7 +66,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
                 temp.pop(key)
         self.worlds = temp.copy()
         startingChance = 1/len(self.worlds)
-        for key, value in self.worlds.items():
+        for key, value in self.worlds.items(): 
                 self.worlds[key] = startingChance
         
         print(self.worlds)
@@ -114,11 +115,50 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         print("I selected team: ", team, team_size, " \n")
         return team
 
-    def propose_mission(self, team_size, betrayals_required = 1):
+    def calculate_probabilities(self):
+        # Calculate the probability of each player being a spy, return as a dict of {player_id: probability}
+
+        orderedProbs = {} # wont include itself, may need to change this TODO
+        for x in range(self.number_of_players):
+            temp = []
+            # if not self.is_spy():
+            if x != self.player_number:
+                for key, value in self.worlds.items():
+                    if x in key:
+                        temp.append(value)
+                orderedProbs[x] = (sum(temp) / len(temp))
+            else:
+                orderedProbs[x] = 0
+            
+        orderedProbs = {x: y for x, y in sorted(orderedProbs.items(), key=lambda item: item[1], reverse=True)}
+        print(orderedProbs)
+        return orderedProbs
+
+
+    def propose_mission(self, team_size, betrayals_required = 1): # Calculate the probability of each player being a spy, then select the "team_size" lowest people
         team = []
-        
+        probabilities = list(self.calculate_probabilities())
+
+        if self.is_spy(): # TODO remember to use betrayals_required
+            # loop through list of players in order of suspicion, find the last player who is a spy, and put them on the team, least likely to be voted against by resistance
+            # Choose so that spies win
+            spiesSelected = 0
+            for x in range(len(probabilities)-1, 0, -1):
+                if probabilities[x] in self.spy_list and spiesSelected < betrayals_required and probabilities[x] != self.player_number:
+                    team.append(probabilities[x])
+                    spiesSelected += 1
+            for x in range(team_size - spiesSelected):
+                if probabilities[x] not in self.spy_list and len(team) < team_size-1:
+                    team.append(probabilities[x])
+        else:
+            # Choose so that resistance wins, select least suspicious members
+            probabilities.reverse() # Reverse the list so that the first element is the least likely to be voted against by resistance
+            for x in range(team_size):
+                team.append(probabilities[x]) # TODO decide if we want to include ourselves in every team or not
+        random.shuffle(team) # Shuffle the team so that the spy is not always last, so that opponents can't model us based off of team proposal order
+        # print("I selected team: ", team, team_size, " \n")
         return team
-        
+
     def vote(self, mission, proposer): # If proposer is suspected spy, be careful of voting yes, if members of mission are suspected spies, vote no
         # CheckAllChance() return list of players in order of suspicion, if any players are too suspicious, vote no
         '''
