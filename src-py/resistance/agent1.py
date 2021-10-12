@@ -26,23 +26,23 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         number_of_players, the player_number (an id number for the agent in the game),
         and a list of agent indexes which are the spies, if the agent is a spy, or empty otherwise
         '''
-        print("New game: ", number_of_players, player_number, spy_list)
-        self.spy_count = {5:2, 6:2, 7:3, 8:3, 9:3, 10:4}
-        self.number_of_players = number_of_players
-        self.player_number = player_number
-        self.spy_list = spy_list
-        self.worlds = {}
+        print("New game: ", number_of_players, player_number, spy_list) # Prints all relavent information about the game, good for debugging
+        self.spy_count = {5:2, 6:2, 7:3, 8:3, 9:3, 10:4} # Returns the number of spies in a game of a relavent size eg a game with 9 players, self.spy_count[9] returns 3
+        self.number_of_players = number_of_players # The number of players in the game
+        self.player_number = player_number # The agent's player number
+        self.spy_list = spy_list # The list of spy indexes, empty if the agent is not a spy
+        self.worlds = {} # Stores the worlds and their probabilities, will be updated as the game progresses
         
         # print(number_of_players)
         # print(player_number)
-        if self.spy_count[number_of_players] == 2:
+        if self.spy_count[number_of_players] == 2: # Creates the worlds for a game of 2 spies
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
                     if not self.is_spy() and x == self.player_number or y == self.player_number:
-                        self.worlds[(x,y)] = "INVALID"
+                        self.worlds[(x,y)] = "INVALID" # Used to remove worlds in which the player is a spy, as they are not needed to be accounted for
                     else:
                         self.worlds[(x,y)] = "VALID"
-        elif self.spy_count[number_of_players] == 3:
+        elif self.spy_count[number_of_players] == 3: # Creates the worlds for a game of 3 spies
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
                     for z in range(y+1, number_of_players):
@@ -50,7 +50,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
                             self.worlds[(x,y,z)] = "INVALID"
                         else:
                             self.worlds[(x,y,z)] = "VALID"
-        elif self.spy_count[number_of_players] == 4:
+        elif self.spy_count[number_of_players] == 4: # Creates the worlds for a game of 4 spies
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
                     for z in range(y+1, number_of_players):
@@ -70,7 +70,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
                 self.worlds[key] = startingChance
         
         print(self.worlds)
-        self.order_worlds()
+        self.order_worlds() # orders the worlds in descending order of most likely to be spies, so first element is most likely to be spy
         
     def order_worlds(self):
         self.worlds = {x: y for x, y in sorted(self.worlds.items(), key=lambda item: item[1], reverse=True)}
@@ -80,94 +80,96 @@ class Agent1(Agent): #TODO Rename based on algorithm used
     def is_spy(self): # returns True iff the agent is a spy
         return self.player_number in self.spy_list
 
-    def propose_missionTEST(self, team_size, betrayals_required = 1): # Must select mission based off internal knowledge, If spy, put spies on team, if resistance, put not spies on team
-        # Select players with least chance of being spy (to include self or not?)
-        # Include self means that 1 guaranteed resistance, but can draw more heat if mission fails, other resistance may suspect us of being a spy, can test
-        '''
-        expects a team_size list of distinct agents with id between 0 (inclusive) and number_of_players (exclusive)
-        to be returned. 
-        betrayals_required are the number of betrayals required for the mission to fail.
-        '''
-        self.order_probabilities() # Ensure that all players are in order of suspicion
-        teamHelper = list(self.probabilities)
-        
-        team = []
-        if self.is_spy(): # TODO remember to use betrayals_required
-            # loop through list of players in order of suspicion, find the last player who is a spy, and put them on the team, least likely to be voted against by resistance
-            # Choose so that spies win
-            spiesSelected = 0
-            for x in range(len(teamHelper)-1, 0, -1):
-                # print(x)
-                if teamHelper[x] in self.spy_list and spiesSelected < betrayals_required:
-                    team.append(teamHelper[x])
-                    spiesSelected += 1
-            for x in range(team_size - spiesSelected):
-                if teamHelper[x] not in self.spy_list and len(team) < team_size-1:
-                    team.append(teamHelper[x])
-            # print("LEAST SUSPICIOUS SPY = ", leastSusSpy)
-            # team.append(leastSusSpy)
-        else:
-            # Choose so that resistance wins, select least suspicious members
-            teamHelper.reverse() # Reverse the list so that the first element is the least likely to be voted against by resistance
-            for x in range(team_size):
-                team.append(teamHelper[x]) # TODO decide if we want to include ourselves in every team or not
-        random.shuffle(team) # Shuffle the team so that the spy is not always last, so that opponents can't model us based off of team proposal order
-        print("I selected team: ", team, team_size, " \n")
-        return team
-
     def calculate_probabilities(self):
         # Calculate the probability of each player being a spy, return as a dict of {player_id: probability}
 
-        orderedProbs = {} # wont include itself, may need to change this TODO
+        orderedProbs = {} # Includes the agent as suspicion of 0, may not be viable for a spy to think itself as not suspicious
         for x in range(self.number_of_players):
             temp = []
-            # if not self.is_spy():
             if x != self.player_number:
-                for key, value in self.worlds.items():
+                for key, value in self.worlds.items(): # Loops through all worlds in which a player exists as a spy
                     if x in key:
                         temp.append(value)
-                orderedProbs[x] = (sum(temp) / len(temp))
+                orderedProbs[x] = (sum(temp) / len(temp)) # Averages the suspicion of each player in the worlds in which they are spies
             else:
-                orderedProbs[x] = 0
+                orderedProbs[x] = 0 # Sets own suspicion to 0
             
-        orderedProbs = {x: y for x, y in sorted(orderedProbs.items(), key=lambda item: item[1], reverse=True)}
+        orderedProbs = {x: y for x, y in sorted(orderedProbs.items(), key=lambda item: item[1], reverse=True)} # Sorts the list in descending order of suspicion
         print(orderedProbs)
         return orderedProbs
 
 
     def propose_mission(self, team_size, betrayals_required = 1): # Calculate the probability of each player being a spy, then select the "team_size" lowest people
         team = []
-        probabilities = list(self.calculate_probabilities())
+        probabilities = list(self.calculate_probabilities()) # returns list of agents in descending order of suspicion
 
-        if self.is_spy(): # TODO remember to use betrayals_required
-            # loop through list of players in order of suspicion, find the last player who is a spy, and put them on the team, least likely to be voted against by resistance
-            # Choose so that spies win
+        if self.is_spy(): # If the agent is a spy, choose a team most likely to pass the vote, but still contain a spy
             spiesSelected = 0
-            for x in range(len(probabilities)-1, 0, -1):
-                if probabilities[x] in self.spy_list and spiesSelected < betrayals_required and probabilities[x] != self.player_number:
+            for x in range(len(probabilities)-1, 0, -1): # looping backwards over the list, find the first spy (least suspicious, and add them to the team)
+                if probabilities[x] in self.spy_list and spiesSelected < betrayals_required and probabilities[x] != self.player_number: # Check that least suspicious player is not the agent, and that the number of spies selected is less than the number of spies required
                     team.append(probabilities[x])
-                    spiesSelected += 1
-            for x in range(team_size - spiesSelected):
+                    spiesSelected += 1 # Increment the number of spies selected, If the number of spies selected is equal to the number of betrayals required, then do not select more spies
+            for x in range(team_size - spiesSelected): # for the remaining number of players required, add the next least suspicious players to the team, more likely to suceed vote
                 if probabilities[x] not in self.spy_list and len(team) < team_size-1:
                     team.append(probabilities[x])
-        else:
-            # Choose so that resistance wins, select least suspicious members
-            probabilities.reverse() # Reverse the list so that the first element is the least likely to be voted against by resistance
+        else: # If the agent is not a spy, choose a team with the least suspicion, least chance of containing a spy
+            probabilities.reverse() # Reverse the list so that the first element is the least likely to be a spy
             for x in range(team_size):
                 team.append(probabilities[x]) # TODO decide if we want to include ourselves in every team or not
         random.shuffle(team) # Shuffle the team so that the spy is not always last, so that opponents can't model us based off of team proposal order
-        # print("I selected team: ", team, team_size, " \n")
+        print("I selected team: ", team, team_size, " \n")
         return team
 
     def vote(self, mission, proposer): # If proposer is suspected spy, be careful of voting yes, if members of mission are suspected spies, vote no
-        # CheckAllChance() return list of players in order of suspicion, if any players are too suspicious, vote no
+        # RESTISTANCE
+            # Could maybe only vote if all agents are in bottom half of suspicion list.
+            # Do NOT vote if any members are most suspicious, or if the proposer is most suspicious
+        # SPY
+            # COULD implement voting no if it will incriminate you to unsafe levels
+            # If the team contains less suspicious spies, vote yes, if the spy is very suspicious, vote no, as it may incriminate yourself
+            # If you are on the team, vote yes unless it will greatly incrimiate you if you betray
+            # If we vote no with no spies on the team, that's suspicious, so vote yes
         '''
         mission is a list of agents to be sent on a mission. 
         The agents on the mission are distinct and indexed between 0 and number_of_players.
         proposer is an int between 0 and number_of_players and is the index of the player who proposed the mission.
         The function should return True if the vote is for the mission, and False if the vote is against the mission.
         '''
-        return random.random()<0.5
+        probabilities = list(self.calculate_probabilities()) # returns list of agents in descending order of suspicion
+        # mission = random.sample(range(1, 7), 3)
+        # probabilities = random.sample(range(0, 7), 7)
+        # print(probabilities)
+        print("I am voting on mission: ", mission, proposer)
+        print("Probabilities ", probabilities)
+        # TODO parameter sweep of cut-offs to vote yes or no, eg how suspicious do we vote no against or yes against, 
+        # TODO do we vote based on position or on actual likelihood of being a spy
+
+        if not self.is_spy(): # If Resistance, deny missions with suspicious proposers or mission members
+            if probabilities.index(proposer) < self.spy_count[self.number_of_players] - 1: # If the proposer is in the top "number of spies" index of the suspicion list, deny mission
+                print("I am voting no, proposer bad")
+                return False
+            else:   # If any agents in mission are in top "number of spies" index of the suspicion list, deny mission
+                for x in mission:
+                    if probabilities.index(x) < self.spy_count[self.number_of_players] - 1: # If the index is within the top number of spots in the suspicion list that there are spies, deny mission
+                        print("I am voting no")
+                        return False
+                print("I am voting yes") # If mission and proposer pass the suspicion test, vote yes
+                return True
+        else: # If the agent is a spy, pass mission with spys on them, but not too suspicious, as it may incriminate yourself
+            if probabilities.index(proposer) == 0: # If the proposer is the most suspicious player, deny mission
+                print("I am voting no, proposer bad, too suspicious1")
+                return False
+            else:
+                for x in mission:
+                    # if probabilities.index(x) < 2: # if one of the 2 most suspicious players is on the mission, deny mission
+                    if probabilities.index(x) == 0: # if the most suspicious player is on the mission, deny mission
+                        print("I am voting no, mission bad, too suspicious2")
+                        return False
+                if sorted(mission) == sorted(self.spy_list):
+                    print("I am voting no, mission bad, contains only spies"), # If mission of only spies, would be incriminating, deny mission
+                    return False
+                print("I am voting yes")
+                return True
 
     def vote_outcome(self, mission, proposer, votes): # If people voted yes and mission failed, they could be spies, if people voted no and mission failed, they could be resistance
         # Update internal perception of players,
@@ -182,6 +184,8 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         pass
 
     def betray(self, mission, proposer): # Beware of betraying if already have or other spies on the same team
+        # Could calculate if betrayal would increase the agents suspicion to bad levels
+        # If number of spies in the mission is less than required to betray the mission, do not betray
         '''
         mission is a list of agents to be sent on a mission. 
         The agents on the mission are distinct and indexed between 0 and number_of_players, and include this agent.
