@@ -32,6 +32,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         self.player_number = player_number # The agent's player number
         self.spy_list = spy_list # The list of spy indexes, empty if the agent is not a spy
         self.worlds = {} # Stores the worlds and their probabilities, will be updated as the game progresses
+        self.round_Number = 1 # The number of rounds played in the game
         
         # print(number_of_players)
         # print(player_number)
@@ -181,6 +182,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         No return value is required or expected.
         '''
         #nothing to do here
+        self.round_Number += 1
         pass
 
     def betray(self, mission, proposer): # Beware of betraying if already have or other spies on the same team
@@ -193,8 +195,18 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         The method should return True if this agent chooses to betray the mission, and False otherwise. 
         By default, spies will betray 30% of the time. 
         '''
+        Spies_in_mission = 0
+        for x in mission:
+            if x in self.spy_list:
+                Spies_in_mission += 1
         if self.is_spy():
-            return random.random()<0.3
+            if self.betrayals_required[self.number_of_players][self.round_Number] <= Spies_in_mission:
+                return True
+            else:
+                return False
+            # return True
+        else:
+            return False
 
     def mission_outcome(self, mission, proposer, betrayals, mission_success):
         # Update internal perception of players
