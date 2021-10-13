@@ -47,7 +47,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
                     for z in range(y+1, number_of_players):
-                        if not self.is_spy(self) and (x == self.player_number or y == self.player_number or z == self.player_number):
+                        if not self.is_spy() and (x == self.player_number or y == self.player_number or z == self.player_number):
                             self.worlds[(x,y,z)] = "INVALID"
                         else:
                             self.worlds[(x,y,z)] = "VALID"
@@ -56,7 +56,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
                 for y in range(x+1, number_of_players):
                     for z in range(y+1, number_of_players):
                         for w in range(z+1, number_of_players):
-                            if not self.is_spy(self) and (x == self.player_number or y == self.player_number or z == self.player_number or w == self.player_number):
+                            if not self.is_spy() and (x == self.player_number or y == self.player_number or z == self.player_number or w == self.player_number):
                                 self.worlds[(x,y,z,w)] = "INVALID"
                             else:
                                 self.worlds[(x,y,z,w)] = "VALID"
@@ -80,9 +80,6 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         self.worlds = {x: y for x, y in sorted(self.worlds.items(), key=lambda item: item[1], reverse=True)}
         # Re-orders the list of agents in descending order of most likely to be spies, so first element is most likely to be spy
         # list(self.probabilities)[0] would return the first element of the list of suspicion, which is the player with the highest suspicion
-
-    def calculate_probabilities(self):
-        pass
 
     def is_spy(self): # returns True iff the agent is a spy
         return self.player_number in self.spy_list
@@ -201,10 +198,11 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         By default, spies will betray 30% of the time. 
         '''
         if self.is_spy():
-            return random.random()<0.3
+            return True
 
     def mission_outcome(self, mission, proposer, betrayals, mission_success):
         # Update internal perception of players
+        # TODO missions can still suceed with a betrayal
         '''
         mission is a list of agents to be sent on a mission. 
         The agents on the mission are distinct and indexed between 0 and number_of_players.
@@ -244,7 +242,12 @@ class Agent1(Agent): #TODO Rename based on algorithm used
                 total_fail += fail_chance[combination] * self.worlds[combination]
             temp_world = self.worlds.copy()
             for combination in fail_chance:
-                temp_world[combination] = fail_chance[combination] * self.worlds[combination] / total_fail
+                # temp_world[combination] = fail_chance[combination] * self.worlds[combination] / total_fail
+                self.worlds[combination] = fail_chance[combination] * self.worlds[combination] / total_fail
+        else:
+            fail_chance = 0
+            total_fail = 0
+            temp_world = 0
             
 
         print(self.worlds)
@@ -271,16 +274,17 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         spies, a list of the player indexes for the spies.
         '''
         #nothing to do here
+        print(self.is_spy())
         pass
 
-print('scenario 1')
-a = Agent1
-Agent1.new_game(a, 8, 0, [])
-Agent1.mission_outcome(a, [1, 2, 3], 2, 1, False)
+# print('scenario 1')
+# a = Agent1
+# Agent1.new_game(a, 8, 0, [])
+# Agent1.mission_outcome(a, [1, 2, 3], 2, 1, False)
 
-print('scenario 2')
-Agent1.new_game(a, 6, 0, [])
-Agent1.mission_outcome(a, [1, 2], 2, 2, False)
+# print('scenario 2')
+# Agent1.new_game(a, 6, 0, [])
+# Agent1.mission_outcome(a, [1, 2], 2, 2, False)
 
 #mission = [0, 1, 2]
 #total = list(itertools.product([True, False], repeat = len(mission)))
