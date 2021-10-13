@@ -140,6 +140,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         proposer is an int between 0 and number_of_players and is the index of the player who proposed the mission.
         The function should return True if the vote is for the mission, and False if the vote is against the mission.
         '''
+        probabilityScore = self.calculate_probabilities()
         probabilities = list(self.calculate_probabilities()) # returns list of agents in descending order of suspicion
         # mission = random.sample(range(1, 7), 3)
         # probabilities = random.sample(range(0, 7), 7)
@@ -150,19 +151,19 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         # TODO do we vote based on position or on actual likelihood of being a spy
 
         if not self.is_spy(): # If Resistance, deny missions with suspicious proposers or mission members
-            if probabilities.index(proposer) < self.spy_count[self.number_of_players] - 1: # If the proposer is in the top "number of spies" index of the suspicion list, deny mission
-                print("I am voting no, proposer bad")
+            if probabilities.index(proposer) < self.spy_count[self.number_of_players] - 1 and probabilityScore[proposer] > 0.05: # If the proposer is in the top "number of spies" index of the suspicion list, deny mission
+                print("I am voting no, proposer bad", probabilities.index(proposer), probabilityScore[proposer])
                 return False
             else:   # If any agents in mission are in top "number of spies" index of the suspicion list, deny mission
                 for x in mission:
-                    if probabilities.index(x) < self.spy_count[self.number_of_players] - 1: # If the index is within the top number of spots in the suspicion list that there are spies, deny mission
+                    if probabilities.index(x) < self.spy_count[self.number_of_players] - 1 and probabilityScore[x] > 0.05: # If the index is within the top number of spots in the suspicion list that there are spies, deny mission
                         print("I am voting no")
                         return False
                 print("I am voting yes") # If mission and proposer pass the suspicion test, vote yes
                 return True
         else: # If the agent is a spy, pass mission with spys on them, but not too suspicious, as it may incriminate yourself
-            if probabilities.index(proposer) == 0: # If the proposer is the most suspicious player, deny mission
-                print("I am voting no, proposer bad, too suspicious1")
+            if probabilities.index(proposer) == 0 and probabilityScore[proposer] > 0.05: # If the proposer is the most suspicious player, deny mission
+                print("I am voting no, proposer bad, too suspicious1", probabilities.index(proposer), probabilityScore[proposer])
                 return False
             else:
                 for x in mission:
@@ -287,6 +288,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         '''
         #nothing to do here
         print(self.is_spy())
+        print("\n\n\n")
         pass
 
 # print('scenario 1')
