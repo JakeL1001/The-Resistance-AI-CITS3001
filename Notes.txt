@@ -71,3 +71,10 @@ If resistence, reduce the number of suspicious agents on a mission, do not propo
     eg if set 2,5,7 is suspected to be spies, do not vote for missions containing these members
 
 Majority of votes yes needed to approve mission, draw of votes or majority no does not approve the mission
+
+self.worlds contains all worlds that could be true, and the probability of each world being true
+having 0s would skew data,
+
+self.validprobabilities, contain all worlds
+
+each player can have a percentage chance that they are a spy based on average of scores of worlds they are in
