@@ -1,3 +1,4 @@
+import itertools
 from agent import Agent
 import random
 
@@ -61,11 +62,14 @@ class Agent1(Agent): #TODO Rename based on algorithm used
                             else:
                                 self.worlds[(x,y,z,w)] = "VALID"
 
+        # update the list of worlds to remove invalid worlds
         temp = self.worlds.copy()
         for key, value in self.worlds.items():
             if value == "INVALID":
                 temp.pop(key)
         self.worlds = temp.copy()
+
+        # set the starting chance of a world being true to the same value
         startingChance = 1/len(self.worlds)
         for key, value in self.worlds.items(): 
                 self.worlds[key] = startingChance
@@ -210,6 +214,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
 
     def mission_outcome(self, mission, proposer, betrayals, mission_success):
         # Update internal perception of players
+        # TODO missions can still suceed with a betrayal
         '''
         mission is a list of agents to be sent on a mission. 
         The agents on the mission are distinct and indexed between 0 and number_of_players.
@@ -218,6 +223,49 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         and mission_success is True if there were not enough betrayals to cause the mission to fail, False otherwise.
         It iss not expected or required for this function to return anything.
         '''
+        # if the mission fails, then the world probabilities can be updated
+        if not mission_success:
+            fail_chance = self.worlds.copy() # this dictionary will store the P(F|C) values
+            total_fail = 0
+            # iterate through all the worlds
+            for combination in fail_chance:
+                # overlap is the agents in both the mission and current combination
+                overlap = set(combination)&set(mission)
+
+                # comb is the combinations of which agents could have chosen to betray
+                # e.g. if we know that there were 2 betrayals, and overlap was [0, 1, 2],
+                #      then the possible betrayal outcomes are:
+                #      (0, 1), (0, 2) and (1, 2)
+                comb = list(itertools.combinations(overlap, betrayals))
+                #print(combination)
+                #print('combinations are')
+                #print(comb)
+
+                # total is the total number of combinations that a mission could end in
+                # each agent either passes the mission (True), or fails the mission (False)
+                # e.g. for a mission with 3 agents, the possible outcomes are:
+                # (True, True, True), (True, True, False), (True, False, True), (True, False, False), (False, True, True), (False, True, False), (False, False, True), (False, False, False)
+                total = list(itertools.product([True, False], repeat = len(mission)))
+                #print('permuations are', len(total))
+                #print(total)
+                # the chance of failing a mission is the number of combinations divided by the total
+                fail_chance[combination] = len(comb)/len(total)
+                # sum the product of P(C) and P(F|C) to get P(F)
+                total_fail += fail_chance[combination] * self.worlds[combination]
+            temp_world = self.worlds.copy()
+            for combination in fail_chance:
+                # temp_world[combination] = fail_chance[combination] * self.worlds[combination] / total_fail
+                self.worlds[combination] = fail_chance[combination] * self.worlds[combination] / total_fail
+        else:
+            fail_chance = 0
+            total_fail = 0
+            temp_world = 0
+            
+
+        print(self.worlds)
+        print(fail_chance)
+        print(total_fail)
+        print(temp_world)
         #nothing to do here
         pass
 
@@ -238,4 +286,18 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         spies, a list of the player indexes for the spies.
         '''
         #nothing to do here
+        print(self.is_spy())
         pass
+
+# print('scenario 1')
+# a = Agent1
+# Agent1.new_game(a, 8, 0, [])
+# Agent1.mission_outcome(a, [1, 2, 3], 2, 1, False)
+
+# print('scenario 2')
+# Agent1.new_game(a, 6, 0, [])
+# Agent1.mission_outcome(a, [1, 2], 2, 2, False)
+
+#mission = [0, 1, 2]
+#total = list(itertools.product([True, False], repeat = len(mission)))
+#print(total)
