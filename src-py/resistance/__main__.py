@@ -1,6 +1,7 @@
 from random_agent import RandomAgent
 from agent1 import Agent1
 from agent2 import Agent2
+from agent3 import Agent3
 from game import Game
 import pandas as pd
 
@@ -12,27 +13,27 @@ agents = [RandomAgent(name='r1'),
         RandomAgent(name='r5'),  
         RandomAgent(name='r6'),  
         RandomAgent(name='r7'),
-        Agent2(name="TEST")]
+        Agent3(name="TEST")]
 
 
 
 
-agents = [Agent2(name='r1'), 
-        Agent2(name='r2'),  
-        Agent2(name='r3'),  
-        # RandomAgent(name='r4'),  
-        Agent2(name='r5'),  
-        Agent2(name='r6'),  
-        Agent2(name='r7'),
-        Agent2(name="TEST")]
+# agents = [Agent3(name='r1'), 
+#         Agent3(name='r2'),  
+#         Agent3(name='r3'),  
+#         # RandomAgent(name='r4'),  
+#         Agent3(name='r5'),  
+#         Agent3(name='r6'),  
+#         Agent3(name='r7'),
+#         Agent3(name="TEST")]
 
 
 
-'''  
-game = Game(agents)
-game.play()
-print(game.missions_lost)
-'''
+
+# game = Game(agents)
+# game.play()
+# print(game.missions_lost)
+
 
 
 df = pd.DataFrame(list())
