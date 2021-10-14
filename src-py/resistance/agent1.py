@@ -1,6 +1,7 @@
 import itertools
 from agent import Agent
 import random
+import csv
 
 class Agent1(Agent): #TODO Rename based on algorithm used
     """
@@ -283,7 +284,26 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         spies, a list of the player indexes for the spies.
         '''
         #nothing to do here
+        
         print('I was spy?', self.is_spy())
+        if self.is_spy():
+            if not spies_win:
+                print("I won!")
+                with open('outcomes.csv','a') as fd:
+                    fd.write('I was spy,Won\n')
+            else:
+                print("I lost")
+                with open('outcomes.csv','a') as fd:
+                    fd.write('I was spy,Lost\n')
+        else:
+            if not spies_win:
+                print("I lost")
+                with open('outcomes.csv','a') as fd:
+                    fd.write('I was not spy,Lost\n')
+            else:
+                print("I won!")
+                with open('outcomes.csv','a') as fd:
+                    fd.write('I was not spy,Won\n')
         pass
 
 # print('scenario 1')
