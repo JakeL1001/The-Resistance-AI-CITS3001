@@ -1,8 +1,10 @@
 from random_agent import RandomAgent
 from agent1 import Agent1
+from agent2 import Agent2
 from game import Game
 import pandas as pd
 
+"""
 agents = [RandomAgent(name='r1'), 
         RandomAgent(name='r2'),  
         RandomAgent(name='r3'),  
@@ -12,6 +14,15 @@ agents = [RandomAgent(name='r1'),
         RandomAgent(name='r7'),
         Agent1(name="TEST")]
 
+"""
+agents = [Agent2(name='r1'), 
+        Agent2(name='r2'),  
+        Agent2(name='r3'),  
+        # RandomAgent(name='r4'),  
+        Agent2(name='r5'),  
+        Agent2(name='r6'),  
+        Agent2(name='r7'),
+        Agent1(name="TEST")]
 #game = Game(agents)
 #game.play()
 #print(game.missions_lost)
