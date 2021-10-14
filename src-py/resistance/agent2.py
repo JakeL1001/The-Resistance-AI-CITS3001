@@ -1,7 +1,7 @@
 import itertools
 from agent import Agent
 import random
-import csv
+
 
 class Agent2(Agent): #TODO Rename based on algorithm used
     """
@@ -28,38 +28,38 @@ class Agent2(Agent): #TODO Rename based on algorithm used
         number_of_players, the player_number (an id number for the agent in the game),
         and a list of agent indexes which are the spies, if the agent is a spy, or empty otherwise
         '''
-        print("New game: ", number_of_players, player_number, spy_list) # Prints all relavent information about the game, good for debugging
+        #if self.name == "TEST": print("New game: ", number_of_players, player_number, spy_list) # #if self.name == "TEST": prints all relavent information about the game, good for debugging
         self.spy_count = {5:2, 6:2, 7:3, 8:3, 9:3, 10:4} # Returns the number of spies in a game of a relavent size eg a game with 9 players, self.spy_count[9] returns 3
         self.number_of_players = number_of_players # The number of players in the game
         self.player_number = player_number # The agent's player number
         self.spy_list = spy_list # The list of spy indexes, empty if the agent is not a spy
         self.worlds = {} # Stores the worlds and their probabilities, will be updated as the game progresses
         
-        # print(number_of_players)
-        # print(player_number)
+        # #if self.name == "TEST": print(number_of_players)
+        # #if self.name == "TEST": print(player_number)
         if self.spy_count[number_of_players] == 2: # Creates the worlds for a game of 2 spies
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
-                    if not self.is_spy() and x == self.player_number or y == self.player_number:
-                        self.worlds[(x,y)] = "INVALID" # Used to remove worlds in which the player is a spy, as they are not needed to be accounted for
-                    else:
+                    #if not self.is_spy() and x == self.player_number or y == self.player_number:
+                    #    self.worlds[(x,y)] = "INVALID" # Used to remove worlds in which the player is a spy, as they are not needed to be accounted for
+                    #else:
                         self.worlds[(x,y)] = "VALID"
         elif self.spy_count[number_of_players] == 3: # Creates the worlds for a game of 3 spies
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
                     for z in range(y+1, number_of_players):
-                        if not self.is_spy() and (x == self.player_number or y == self.player_number or z == self.player_number):
-                            self.worlds[(x,y,z)] = "INVALID"
-                        else:
+                        #if not self.is_spy() and (x == self.player_number or y == self.player_number or z == self.player_number):
+                        #    self.worlds[(x,y,z)] = "INVALID"
+                        #else:
                             self.worlds[(x,y,z)] = "VALID"
         elif self.spy_count[number_of_players] == 4: # Creates the worlds for a game of 4 spies
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
                     for z in range(y+1, number_of_players):
                         for w in range(z+1, number_of_players):
-                            if not self.is_spy() and (x == self.player_number or y == self.player_number or z == self.player_number or w == self.player_number):
-                                self.worlds[(x,y,z,w)] = "INVALID"
-                            else:
+                            #if not self.is_spy() and (x == self.player_number or y == self.player_number or z == self.player_number or w == self.player_number):
+                            #    self.worlds[(x,y,z,w)] = "INVALID"
+                            #else:
                                 self.worlds[(x,y,z,w)] = "VALID"
 
         # update the list of worlds to remove invalid worlds
@@ -74,7 +74,7 @@ class Agent2(Agent): #TODO Rename based on algorithm used
         for key, value in self.worlds.items(): 
                 self.worlds[key] = startingChance
         
-        print(self.worlds)
+        #if self.name == "TEST": print(self.worlds)
         self.order_worlds() # orders the worlds in descending order of most likely to be spies, so first element is most likely to be spy
         
     def order_worlds(self):
@@ -91,21 +91,24 @@ class Agent2(Agent): #TODO Rename based on algorithm used
         orderedProbs = {} # Includes the agent as suspicion of 0, may not be viable for a spy to think itself as not suspicious
         for x in range(self.number_of_players):
             temp = []
-            if x != self.player_number or self.is_spy():
+            if True:#x != self.player_number or self.is_spy():
                 for key, value in self.worlds.items(): # Loops through all worlds in which a player exists as a spy
                     if x in key:
                         temp.append(value)
                 orderedProbs[x] = (sum(temp) / len(temp)) # Averages the suspicion of each player in the worlds in which they are spies
-            else:
-                orderedProbs[x] = 0 # Sets own suspicion to 0
+            #else:
+                #orderedProbs[x] = 0 # Sets own suspicion to 0
             
         orderedProbs = {x: y for x, y in sorted(orderedProbs.items(), key=lambda item: item[1], reverse=True)} # Sorts the list in descending order of suspicion
         total = 0
         for agents, suspicion in orderedProbs.items():
             total += suspicion
+        #if self.is_spy():
         average = total/len(orderedProbs)
-        print('average suspiciousness is:', average)
-        print(orderedProbs)
+        #else:
+            #average = total/(len(orderedProbs) - 1)
+        #if self.name == "TEST": print('average suspiciousness is:', average)
+        #if self.name == "TEST": print(orderedProbs)
         return orderedProbs, average
 
 
@@ -113,7 +116,7 @@ class Agent2(Agent): #TODO Rename based on algorithm used
         team = []
         probabilities, average = self.calculate_probabilities() # returns list of agents in descending order of suspicion
         probabilities = list(probabilities)
-        print(probabilities)
+        #if self.name == "TEST": print(probabilities)
         if self.is_spy(): # If the agent is a spy, choose a team most likely to pass the vote, but still contain a spy
             spiesSelected = 0
             for x in range(len(probabilities)-1, 0, -1): # looping backwards over the list, find the first spy (least suspicious, and add them to the team)
@@ -121,14 +124,15 @@ class Agent2(Agent): #TODO Rename based on algorithm used
                     team.append(probabilities[x])
                     spiesSelected += 1 # Increment the number of spies selected, If the number of spies selected is equal to the number of betrayals required, then do not select more spies
             for x in range(team_size - spiesSelected+1): # for the remaining number of players required, add the next least suspicious players to the team, more likely to suceed vote
-                if probabilities[x] not in self.spy_list and len(team) < team_size-1:
+                if probabilities[x] not in self.spy_list and len(team) < team_size+1:
                     team.append(probabilities[x])
         else: # If the agent is not a spy, choose a team with the least suspicion, least chance of containing a spy
             probabilities.reverse() # Reverse the list so that the first element is the least likely to be a spy
-            for x in range(team_size+1):
+            #if self.name == "TEST": print('reversed is:', probabilities)
+            for x in range(team_size):
                 team.append(probabilities[x]) # TODO decide if we want to include ourselves in every team or not
         random.shuffle(team) # Shuffle the team so that the spy is not always last, so that opponents can't model us based off of team proposal order
-        print("I selected team: ", team, team_size, " \n")
+        #if self.name == "TEST": print("I selected team: ", team, team_size, " \n")
         return team
 
     def vote(self, mission, proposer): # If proposer is suspected spy, be careful of voting yes, if members of mission are suspected spies, vote no
@@ -150,39 +154,39 @@ class Agent2(Agent): #TODO Rename based on algorithm used
         probabilities, average = self.calculate_probabilities() # returns list of agents in descending order of suspicion
         # mission = random.sample(range(1, 7), 3)
         # probabilities = random.sample(range(0, 7), 7)
-        # print(probabilities)
-        print("I am voting on mission: ", mission, proposer)
-        print("Probabilities ", probabilities)
+        # #if self.name == "TEST": print(probabilities)
+        #if self.name == "TEST": print("I am voting on mission: ", mission, proposer)
+        #if self.name == "TEST": print("Probabilities ", probabilities)
         # TODO parameter sweep of cut-offs to vote yes or no, eg how suspicious do we vote no against or yes against, 
         # TODO do we vote based on position or on actual likelihood of being a spy
 
         if not self.is_spy(): # If Resistance, deny missions with suspicious proposers or mission members
-            if list(probabilities.keys()).index(proposer) < self.spy_count[self.number_of_players] - 1: # If the proposer is in the top "number of spies" index of the suspicion list, deny mission
-                print("I am voting no, proposer bad")
+            if probabilities.get(proposer) > average: # If the proposer is in the top "number of spies" index of the suspicion list, deny mission
+                #if self.name == "TEST": print("I am voting no, proposer bad")
                 return False
             else:   # If any agents in mission are in top "number of spies" index of the suspicion list, deny mission
                 for x in mission:
-                    if list(probabilities.keys()).index(x) < self.spy_count[self.number_of_players] - 1: # If the index is within the top number of spots in the suspicion list that there are spies, deny mission
-                        print("I am voting no")
+                    if probabilities.get(x) > average: # If the index is within the top number of spots in the suspicion list that there are spies, deny mission
+                        #if self.name == "TEST": print("I am voting no")
                         return False
-                print("I am voting yes") # If mission and proposer pass the suspicion test, vote yes
+                #if self.name == "TEST": print("I am voting yes") # If mission and proposer pass the suspicion test, vote yes
                 return True
         else: # If the agent is a spy, pass mission with spys on them, but not too suspicious, as it may incriminate yourself
             #if probabilities.index(proposer) == 0: # If the proposer is the most suspicious player, deny mission
             if probabilities.get(proposer) > average: # If the proposer is more suspicious than average, then vote no
-                print("I am voting no, proposer bad, too suspicious1")
+                #if self.name == "TEST": print("I am voting no, proposer bad, too suspicious1")
                 return False
             else:
                 for x in mission:
                     # if probabilities.index(x) < 2: # if one of the 2 most suspicious players is on the mission, deny mission
                     # if probabilities.index(x) == 0: # if the most suspicious player is on the mission, deny mission
                     if probabilities.get(x) > average: # if the most suspicious player is on the mission, deny mission
-                        print("I am voting no, mission bad, too suspicious2")
+                        #if self.name == "TEST": print("I am voting no, mission bad, too suspicious2")
                         return False
                 if sorted(mission) == sorted(self.spy_list):
-                    print("I am voting no, mission bad, contains only spies"), # If mission of only spies, would be incriminating, deny mission
+                    #if self.name == "TEST": print("I am voting no, mission bad, contains only spies"), # If mission of only spies, would be incriminating, deny mission
                     return False
-                print("I am voting yes")
+                #if self.name == "TEST": print("I am voting yes")
                 return True
 
     def vote_outcome(self, mission, proposer, votes): # If people voted yes and mission failed, they could be spies, if people voted no and mission failed, they could be resistance
@@ -235,17 +239,17 @@ class Agent2(Agent): #TODO Rename based on algorithm used
                 #      then the possible betrayal outcomes are:
                 #      (0, 1), (0, 2) and (1, 2)
                 comb = list(itertools.combinations(overlap, betrayals))
-                #print(combination)
-                #print('combinations are')
-                #print(comb)
+                ##if self.name == "TEST": print(combination)
+                ##if self.name == "TEST": print('combinations are')
+                ##if self.name == "TEST": print(comb)
 
                 # total is the total number of combinations that a mission could end in
                 # each agent either passes the mission (True), or fails the mission (False)
                 # e.g. for a mission with 3 agents, the possible outcomes are:
                 # (True, True, True), (True, True, False), (True, False, True), (True, False, False), (False, True, True), (False, True, False), (False, False, True), (False, False, False)
                 total = list(itertools.product([True, False], repeat = len(mission)))
-                #print('permuations are', len(total))
-                #print(total)
+                ##if self.name == "TEST": print('permuations are', len(total))
+                ##if self.name == "TEST": print(total)
                 # the chance of failing a mission is the number of combinations divided by the total
                 fail_chance[combination] = len(comb)/len(total)
                 # sum the product of P(C) and P(F|C) to get P(F)
@@ -260,10 +264,10 @@ class Agent2(Agent): #TODO Rename based on algorithm used
         #    temp_world = 0
             
 
-        #print(self.worlds)
-        #print(fail_chance)
-        #print(total_fail)
-        #print(temp_world)
+        ##if self.name == "TEST": print(self.worlds)
+        ##if self.name == "TEST": print(fail_chance)
+        ##if self.name == "TEST": print(total_fail)
+        ##if self.name == "TEST": print(temp_world)
         #nothing to do here
         pass
 
@@ -285,36 +289,37 @@ class Agent2(Agent): #TODO Rename based on algorithm used
         '''
         #nothing to do here
         pass
-        """print('I was spy?', self.is_spy())
-        if self.is_spy():
-            if not spies_win:
-                print("I won!")
-                with open('outcomes.csv','a') as fd:
-                    fd.write('I was spy,Won\n')
+        #if self.name == "TEST": print('I was spy?', self.is_spy())
+        if self.name == 'TEST':
+            if self.is_spy():
+                if not spies_win:
+                    #if self.name == "TEST": print("I won!")
+                    with open('outcomes.csv','a') as fd:
+                        fd.write('I was spy,Won\n')
+                else:
+                    #if self.name == "TEST": print("I lost")
+                    with open('outcomes.csv','a') as fd:
+                        fd.write('I was spy,Lost\n')
             else:
-                print("I lost")
-                with open('outcomes.csv','a') as fd:
-                    fd.write('I was spy,Lost\n')
-        else:
-            if not spies_win:
-                print("I lost")
-                with open('outcomes.csv','a') as fd:
-                    fd.write('I was not spy,Lost\n')
-            else:
-                print("I won!")
-                with open('outcomes.csv','a') as fd:
-                    fd.write('I was not spy,Won\n')
-        pass"""
+                if not spies_win:
+                    #if self.name == "TEST": print("I lost")
+                    with open('outcomes.csv','a') as fd:
+                        fd.write('I was not spy,Lost\n')
+                else:
+                    #if self.name == "TEST": print("I won!")
+                    with open('outcomes.csv','a') as fd:
+                        fd.write('I was not spy,Won\n')
+        pass
 
-# print('scenario 1')
+# #if self.name == "TEST": print('scenario 1')
 # a = Agent1
 # Agent1.new_game(a, 8, 0, [])
 # Agent1.mission_outcome(a, [1, 2, 3], 2, 1, False)
 
-# print('scenario 2')
+# #if self.name == "TEST": print('scenario 2')
 # Agent1.new_game(a, 6, 0, [])
 # Agent1.mission_outcome(a, [1, 2], 2, 2, False)
 
 #mission = [0, 1, 2]
 #total = list(itertools.product([True, False], repeat = len(mission)))
-#print(total)
+##if self.name == "TEST": print(total)

@@ -4,7 +4,7 @@ from agent2 import Agent2
 from game import Game
 import pandas as pd
 
-"""
+
 agents = [RandomAgent(name='r1'), 
         RandomAgent(name='r2'),  
         RandomAgent(name='r3'),  
@@ -12,9 +12,11 @@ agents = [RandomAgent(name='r1'),
         RandomAgent(name='r5'),  
         RandomAgent(name='r6'),  
         RandomAgent(name='r7'),
-        Agent1(name="TEST")]
+        Agent2(name="TEST")]
 
-"""
+
+
+
 agents = [Agent2(name='r1'), 
         Agent2(name='r2'),  
         Agent2(name='r3'),  
@@ -22,15 +24,21 @@ agents = [Agent2(name='r1'),
         Agent2(name='r5'),  
         Agent2(name='r6'),  
         Agent2(name='r7'),
-        Agent1(name="TEST")]
-#game = Game(agents)
-#game.play()
-#print(game.missions_lost)
+        Agent2(name="TEST")]
+
+
+
+'''  
+game = Game(agents)
+game.play()
+print(game.missions_lost)
+'''
+
 
 df = pd.DataFrame(list())
 df.to_csv('outcomes.csv')
 
-NO_GAMES = 1000
+NO_GAMES = 10000
 
 for i in range(NO_GAMES):
         game = Game(agents)
