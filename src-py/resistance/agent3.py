@@ -181,6 +181,12 @@ class Agent3(Agent): #TODO Rename based on algorithm used
         if self.votecount == 4:
             return True
 
+        # Always decline mission if you are not in it
+        # As resistance, this is the best play as it reduces the chance of getting a spy
+        if not self.is_spy:
+            if self.player_number not in mission:
+                return False
+
         if not self.is_spy(): # If Resistance, deny missions with suspicious proposers or mission members
             if probabilities.get(proposer) > average: # If the proposer is in the top "number of spies" index of the suspicion list, deny mission
                 #if self.name == "TEST": print("I am voting no, proposer bad")

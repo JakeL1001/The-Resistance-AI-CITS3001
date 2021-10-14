@@ -13,9 +13,18 @@ agents = [RandomAgent(name='r1'),
         RandomAgent(name='r5'),  
         RandomAgent(name='r6'),  
         RandomAgent(name='r7'),
-        Agent3(name="TEST")]
+        Agent1(name="TEST")]
 
 
+
+# agents = [Agent1(name='TEST'), 
+#         Agent2(name='r2'),  
+#         RandomAgent(name='r3'),  
+#         # RandomAgent(name='r4'),  
+#         RandomAgent(name='r5'),  
+#         RandomAgent(name='r6'),  
+#         RandomAgent(name='r7'),
+#         Agent3(name="r8")]
 
 
 # agents = [Agent3(name='r1'), 
@@ -28,7 +37,23 @@ agents = [RandomAgent(name='r1'),
 #         Agent3(name="TEST")]
 
 
+# agents = [Agent1(name='r1'), 
+#         Agent1(name='r2'),  
+#         Agent1(name='r3'),  
+#         # RandomAgent(name='r4'),  
+#         Agent1(name='r5'),  
+#         Agent1(name='r6'),  
+#         Agent1(name='r7'),
+#         Agent1(name="TEST")]
 
+# agents = [Agent2(name='r1'), 
+#         Agent2(name='r2'),  
+#         Agent2(name='r3'),  
+#         # RandomAgent(name='r4'),  
+#         Agent2(name='r5'),  
+#         Agent2(name='r6'),  
+#         Agent2(name='r7'),
+#         Agent2(name="TEST")]        
 
 # game = Game(agents)
 # game.play()
