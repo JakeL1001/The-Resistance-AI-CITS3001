@@ -212,4 +212,3 @@ class Mission():
         raises an exception if the mission is not approved or fails not recorded.
         '''
         return self.is_approved() and len(self.fails) < Agent.fails_required[len(self.agents)][self.rnd]
-                
