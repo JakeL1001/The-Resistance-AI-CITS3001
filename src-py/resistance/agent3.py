@@ -177,6 +177,7 @@ class Agent3(Agent): #TODO Rename based on algorithm used
         # TODO parameter sweep of cut-offs to vote yes or no, eg how suspicious do we vote no against or yes against, 
         # TODO do we vote based on position or on actual likelihood of being a spy
 
+        # EXPERT RULES
         # Always accept the final mission proposal, as voting no does nothing
         if self.votecount == 4:
             return True
