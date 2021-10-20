@@ -111,14 +111,14 @@ if __name__ == "__main__":
                         RandomAgent(name='r6'),  
                         RandomAgent(name='r7'),
                         Agent3(name="TEST")]
-                # agents = [Agent3(name='r1'), 
-                #         Agent3(name='r2'),  
-                #         Agent3(name='r3'),  
-                #         # Agent2(name='r4'),  
-                #         Agent3(name='r5'),  
-                #         Agent3(name='r6'),  
-                #         Agent3(name='r7'),
-                #         Agent3(name="TEST")]
+                agents = [Agent3(name='r1'), 
+                        Agent3(name='r2'),  
+                        Agent3(name='r3'),  
+                        # Agent2(name='r4'),  
+                        Agent3(name='r5'),  
+                        Agent3(name='r6'),  
+                        Agent3(name='r7'),
+                        Agent3(name="TEST")]
                 random.shuffle(agents)
                 print(agents)
                 for i in range(NO_GAMES):

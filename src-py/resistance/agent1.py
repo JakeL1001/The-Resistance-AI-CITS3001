@@ -171,14 +171,14 @@ class Agent1(Agent): #TODO Rename based on algorithm used
                 return True
         else: # If the agent is a spy, pass mission with spys on them, but not too suspicious, as it may incriminate yourself
             #if probabilities.index(proposer) == 0: # If the proposer is the most suspicious player, deny mission
-            if probabilities.get(proposer) > average: # If the proposer is more suspicious than average, then vote no
+            if list(probabilities.keys()).index(proposer) < self.spy_count[self.number_of_players] - 1: # If the proposer is more suspicious than average, then vote no
                 #print("I am voting no, proposer bad, too suspicious1")
                 return False
             else:
                 for x in mission:
                     # if probabilities.index(x) < 2: # if one of the 2 most suspicious players is on the mission, deny mission
                     # if probabilities.index(x) == 0: # if the most suspicious player is on the mission, deny mission
-                    if probabilities.get(x) > average: # if the most suspicious player is on the mission, deny mission
+                    if list(probabilities.keys()).index(proposer) < self.spy_count[self.number_of_players] - 1: # if the most suspicious player is on the mission, deny mission
                         #print("I am voting no, mission bad, too suspicious2")
                         return False
                 if sorted(mission) == sorted(self.spy_list):
