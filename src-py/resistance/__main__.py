@@ -78,7 +78,7 @@ if __name__ == "__main__":
         df = pd.DataFrame(list())
         df.to_csv('outcomes.csv')
 
-        NO_GAMES = 5000
+        NO_GAMES = 1000
 
         # processes = []
         # for i in range(5,11): # Runs 6 processes, each testing a different number of agents (DIFFERENT NUMBER OF PLAYERS NOT YET IMPLEMENTED)
