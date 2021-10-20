@@ -78,7 +78,7 @@ if __name__ == "__main__":
         df = pd.DataFrame(list())
         df.to_csv('outcomes.csv')
 
-        NO_GAMES = 10000
+        NO_GAMES = 5000
 
         # processes = []
         # for i in range(5,11): # Runs 6 processes, each testing a different number of agents (DIFFERENT NUMBER OF PLAYERS NOT YET IMPLEMENTED)
@@ -89,18 +89,35 @@ if __name__ == "__main__":
         # for p in processes:
         #         p.join()
 
-        for p in range(5,11):
+        # for p in range(7,8):
+        #         print(p)
+        #         agents = []
+        #         for x in range(1,p):
+        #                 agents.append(RandomAgent(name="r{}".format(str(x))))
+        #         agents.append(Agent3(name="TEST"))
+        #         random.shuffle(agents)
+        #         print(agents)
+        #         for i in range(NO_GAMES):
+        #                 game = Game(agents)
+        #                 game.play()
+                        
+        for p in range(7,8):
                 print(p)
-                agents = []
-                for x in range(1,p):
-                        agents.append(RandomAgent(name="r{}".format(str(x))))
-                agents.append(Agent1(name="TEST"))
+                agents = [Agent1(name='r1'), 
+                        Agent1(name='r2'),  
+                        Agent1(name='r3'),  
+                        # RandomAgent(name='r4'),  
+                        Agent1(name='r5'),  
+                        Agent1(name='r6'),  
+                        Agent1(name='r7'),
+                        Agent3(name="TEST")]
                 random.shuffle(agents)
                 print(agents)
                 for i in range(NO_GAMES):
                         game = Game(agents)
                         game.play()
-
+                
+                
         # agents = [RandomAgent(name='r1'), 
         #         RandomAgent(name='r2'),  
         #         RandomAgent(name='r3'),  
@@ -117,7 +134,7 @@ if __name__ == "__main__":
         df = pd.read_csv('outcomes.csv')
         df = df.reset_index()
 
-        df.columns = ['Players','Role', 'Win']
+        df.columns = ['Role', 'Win']
         total_wins = df[df['Win'] == 'Won']
         spy_wins = df[df['Role'] == 'I was spy' ]
         games_as_spy = spy_wins['Win'].count()

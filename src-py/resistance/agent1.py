@@ -312,20 +312,20 @@ class Agent1(Agent): #TODO Rename based on algorithm used
                 if spies_win:
                     #print("I won!")
                     with open('outcomes.csv','a') as fd:
-                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
+                        fd.write('I was spy,Won\n')
                 else:
                     #print("I lost")
                     with open('outcomes.csv','a') as fd:
-                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
+                        fd.write('I was spy,Lost\n')
             else:
                 if spies_win:
                     #print("I lost")
                     with open('outcomes.csv','a') as fd:
-                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
+                        fd.write('I was not spy,Lost\n')
                 else:
                     #print("I won!")
                     with open('outcomes.csv','a') as fd:
-                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
+                        fd.write('I was not spy,Won\n')
         pass
 
 # #print('scenario 1')
