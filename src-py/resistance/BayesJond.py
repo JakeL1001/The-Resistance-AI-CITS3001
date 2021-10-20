@@ -56,8 +56,7 @@ class BayesJond(Agent): #TODO Rename based on algorithm used
                     for z in range(y+1, number_of_players):
                         for w in range(z+1, number_of_players):
                             self.worlds[(x,y,z,w)] = "VALID"
-        for i in range(number_of_players): # Create the probabilities set for all players
-            self.probabilities[i] = 0 # Set the initial value for players to 0
+
 
         # set the starting chance of a world being true to the same value
         startingChance = 1/len(self.worlds)
