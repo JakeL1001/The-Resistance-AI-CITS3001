@@ -177,6 +177,7 @@ class Agent3(Agent): #TODO Rename based on algorithm used
         # TODO parameter sweep of cut-offs to vote yes or no, eg how suspicious do we vote no against or yes against, 
         # TODO do we vote based on position or on actual likelihood of being a spy
 
+        # EXPERT RULES
         # Always accept the final mission proposal, as voting no does nothing
         if self.votecount == 4:
             return True
@@ -328,7 +329,7 @@ class Agent3(Agent): #TODO Rename based on algorithm used
         #if self.name == "TEST": print('I was spy?', self.is_spy())
         if self.name == 'TEST':
             if self.is_spy():
-                if not spies_win:
+                if spies_win:
                     #if self.name == "TEST": print("I won!")
                     with open('outcomes.csv','a') as fd:
                         fd.write('I was spy,Won\n')
@@ -337,7 +338,7 @@ class Agent3(Agent): #TODO Rename based on algorithm used
                     with open('outcomes.csv','a') as fd:
                         fd.write('I was spy,Lost\n')
             else:
-                if not spies_win:
+                if spies_win:
                     #if self.name == "TEST": print("I lost")
                     with open('outcomes.csv','a') as fd:
                         fd.write('I was not spy,Lost\n')
