@@ -210,18 +210,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         By default, spies will betray 30% of the time. 
         '''
         # Currently only fails mission if there is enough spies in the mission to successfully fail, so missions that require 2 fails but only 1 spy are not failed
-        Spies_in_mission = 0
-        for x in mission:
-            if x in self.spy_list:
-                Spies_in_mission += 1
-        if self.is_spy():
-            if self.fails_required[self.number_of_players][self.mission_Number-1] <= Spies_in_mission:
-                return True
-            else:
-                return False
-            # return True
-        else:
-            return False
+        return True
 
     def mission_outcome(self, mission, proposer, betrayals, mission_success):
         # Update internal perception of players
