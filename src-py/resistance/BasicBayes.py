@@ -220,23 +220,67 @@ class BasicBayes(Agent):
         spies, a list of the player indexes for the spies.
         '''
 
-        if self.name == 'TEST':
+        if self.name == 'BasicBayesRandom':
             if self.is_spy():
                 if spies_win:
-                    #print("I won!")
-                    with open('outcomes.csv','a') as fd:
-                        fd.write('I was spy,Won\n')
+                    with open('BasicBayesRandom.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
                 else:
-                    #print("I lost")
-                    with open('outcomes.csv','a') as fd:
-                        fd.write('I was spy,Lost\n')
+                    with open('BasicBayesRandom.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
             else:
                 if spies_win:
-                    #print("I lost")
-                    with open('outcomes.csv','a') as fd:
-                        fd.write('I was not spy,Lost\n')
+                    with open('BasicBayesRandom.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
                 else:
-                    #print("I won!")
-                    with open('outcomes.csv','a') as fd:
-                        fd.write('I was not spy,Won\n')
+                    with open('BasicBayesRandom.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
+                        
+        elif self.name == 'BasicBayesBasic':
+            if self.is_spy():
+                if spies_win:
+                    with open('BasicBayesBasic.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
+                else:
+                    with open('BasicBayesBasic.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
+            else:
+                if spies_win:
+                    with open('BasicBayesBasic.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
+                else:
+                    with open('BasicBayesBasic.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
+        
+        elif self.name == 'BasicBayesJond':
+            if self.is_spy():
+                if spies_win:
+                    with open('BasicBayesJond.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
+                else:
+                    with open('BasicBayesJond.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
+            else:
+                if spies_win:
+                    with open('BasicBayesJond.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
+                else:
+                    with open('BasicBayesJond.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
+        
+        elif self.name == 'BasicBayesCombination':
+            if self.is_spy():
+                if spies_win:
+                    with open('BasicBayesCombination.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
+                else:
+                    with open('BasicBayesCombination.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
+            else:
+                if spies_win:
+                    with open('BasicBayesCombination.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
+                else:
+                    with open('BasicBayesCombination.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
 

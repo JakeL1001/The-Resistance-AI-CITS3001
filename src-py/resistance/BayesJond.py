@@ -2,14 +2,8 @@ import itertools
 from agent import Agent
 import random
 
-# IMPLEMENT EXPERT RULES
-# TODO Keep in mind mission sizes vs number of agents, always will have a spy if not on mission DONE 
-# TODO Avoid failing with more spies than required number of betrayals Done
-# TODO Spies always fail after 2 missions have failed, will guarantee a win Done
-# TODO Always vote no if not on mission Done
 
-
-class BayesJond(Agent): #TODO Rename based on algorithm used
+class BayesJond(Agent):
     """
     All players should start with equal chance of being spy, IF resistance in game of 5 players, each other player has a 50% chance of being a spy, 
     as it is 2/4 chance of being a spy if we are not included in the count. This should be kept in mind and update when playing as spy too, as it can help avoid detection
@@ -23,7 +17,7 @@ class BayesJond(Agent): #TODO Rename based on algorithm used
     self.spy_count stores a dict of how many spies are in a game in regards to how many players are in the game, eg a game with 5 players has 2 spies
     """
 
-    def __init__(self, name='Bayes Jond 007'): # Initialises the agent. # TODO change name
+    def __init__(self, name='Bayes Jond 007'): # Initialises the agent.
         self.name = name
 
     def new_game(self, number_of_players, player_number, spy_list): 
@@ -173,14 +167,10 @@ class BayesJond(Agent): #TODO Rename based on algorithm used
         votes is a list of players that voted in favour of the mission
         No return value is required or expected.
         '''
-        yes = 0
-        no = 0
-
         if len(votes) >= self.number_of_players/2: # increment if the vote fails
             self.votecount += 1
         else: # reset if the vote succeeds
             self.votecount = 0
-        pass
 
     def betray(self, mission, proposer): 
         '''
@@ -247,7 +237,6 @@ class BayesJond(Agent): #TODO Rename based on algorithm used
             
             for combination in fail_chance: # set the world probabilities to the newly calculated values
                 self.worlds[combination] = fail_chance[combination] * self.worlds[combination] / total_fail
-        pass
 
     def round_outcome(self, rounds_complete, missions_failed):
         '''
@@ -264,23 +253,66 @@ class BayesJond(Agent): #TODO Rename based on algorithm used
         spies_win, True iff the spies caused 3+ missions to fail
         spies, a list of the player indexes for the spies.
         '''
-        if self.name == 'TEST':
+        if self.name == 'BayesJondRandom':
             if self.is_spy():
                 if spies_win:
-                    #if self.name == "TEST": print("I won!")
-                    with open('outcomes.csv','a') as fd:
-                        fd.write('I was spy,Won\n')
+                    with open('BayesJondRandom.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
                 else:
-                    #if self.name == "TEST": print("I lost")
-                    with open('outcomes.csv','a') as fd:
-                        fd.write('I was spy,Lost\n')
+                    with open('BayesJondRandom.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
             else:
                 if spies_win:
-                    #if self.name == "TEST": print("I lost")
-                    with open('outcomes.csv','a') as fd:
-                        fd.write('I was not spy,Lost\n')
+                    with open('BayesJondRandom.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
                 else:
-                    #if self.name == "TEST": print("I won!")
-                    with open('outcomes.csv','a') as fd:
-                        fd.write('I was not spy,Won\n')
-        pass
+                    with open('BayesJondRandom.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
+                        
+        elif self.name == 'BayesJondBasic':
+            if self.is_spy():
+                if spies_win:
+                    with open('BayesJondBasic.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
+                else:
+                    with open('BayesJondBasic.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
+            else:
+                if spies_win:
+                    with open('BayesJondBasic.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
+                else:
+                    with open('BayesJondBasic.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
+        
+        elif self.name == 'BayesJondJond':
+            if self.is_spy():
+                if spies_win:
+                    with open('BayesJondJond.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
+                else:
+                    with open('BayesJondJond.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
+            else:
+                if spies_win:
+                    with open('BayesJondJond.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
+                else:
+                    with open('BayesJondJond.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
+        
+        elif self.name == 'BayesJondCombination':
+            if self.is_spy():
+                if spies_win:
+                    with open('BayesJondCombination.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
+                else:
+                    with open('BayesJondCombination.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
+            else:
+                if spies_win:
+                    with open('BayesJondCombination.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
+                else:
+                    with open('BayesJondCombination.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
