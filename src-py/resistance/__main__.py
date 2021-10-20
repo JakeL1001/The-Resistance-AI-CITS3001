@@ -78,7 +78,7 @@ if __name__ == "__main__":
         df = pd.DataFrame(list())
         df.to_csv('outcomes.csv')
 
-        NO_GAMES = 5000
+        NO_GAMES = 1000
 
         # processes = []
         # for i in range(5,11): # Runs 6 processes, each testing a different number of agents (DIFFERENT NUMBER OF PLAYERS NOT YET IMPLEMENTED)
@@ -103,14 +103,22 @@ if __name__ == "__main__":
                         
         for p in range(7,8):
                 print(p)
-                agents = [Agent1(name='r1'), 
-                        Agent1(name='r2'),  
-                        Agent1(name='r3'),  
+                agents = [RandomAgent(name='r1'), 
+                        RandomAgent(name='r2'),  
+                        RandomAgent(name='r3'),  
                         # RandomAgent(name='r4'),  
-                        Agent1(name='r5'),  
-                        Agent1(name='r6'),  
-                        Agent1(name='r7'),
+                        RandomAgent(name='r5'),  
+                        RandomAgent(name='r6'),  
+                        RandomAgent(name='r7'),
                         Agent3(name="TEST")]
+                # agents = [Agent3(name='r1'), 
+                #         Agent3(name='r2'),  
+                #         Agent3(name='r3'),  
+                #         # Agent2(name='r4'),  
+                #         Agent3(name='r5'),  
+                #         Agent3(name='r6'),  
+                #         Agent3(name='r7'),
+                #         Agent3(name="TEST")]
                 random.shuffle(agents)
                 print(agents)
                 for i in range(NO_GAMES):
