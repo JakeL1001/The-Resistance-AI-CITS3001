@@ -4,9 +4,6 @@ import random
 
 class BasicBayes(Agent):
     """
-    All players should start with equal chance of being spy, IF resistance in game of 5 players, each other player has a 50% chance of being a spy, 
-    as it is 2/4 chance of being a spy if we are not included in the count. This should be kept in mind and update when playing as spy too, as it can help avoid detection
-    
     self.worlds stores a dictionary of all possible worlds, where each key is a tuple of the a combinations players in the world, 
                 assuming the players of whose names are in the tuple are both spies, and the value is the likelihood of that world being the real world.
                 eg. if (1,2): 0.4, then there is a 40% chance of the real world having players 1 and 2 as spies.
@@ -199,15 +196,13 @@ class BasicBayes(Agent):
                 # sum the product of P(C) and P(F|C) to get P(F)
                 total_fail += fail_chance[combination] * self.worlds[combination]
                 
-            for combination in fail_chance:
-
+            for combination in fail_chance: # update the worlds based on the new P(F) values
                 try:
                     self.worlds[combination] = fail_chance[combination] * self.worlds[combination] / total_fail
                 except ZeroDivisionError:
                     self.worlds[combination] = 0
 
         self.mission_Number += 1
-        pass
 
     def round_outcome(self, rounds_complete, missions_failed):
         '''
@@ -244,4 +239,4 @@ class BasicBayes(Agent):
                     #print("I won!")
                     with open('outcomes.csv','a') as fd:
                         fd.write('I was not spy,Won\n')
-        pass
+
