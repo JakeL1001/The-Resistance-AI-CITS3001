@@ -3,6 +3,12 @@ from agent import Agent
 import random
 
 # IMPLEMENT EXPERT RULES
+# TODO Keep in mind mission sizes vs number of agents, always will have a spy if not on mission DONE 
+# TODO Avoid failing with more spies than required number of betrayals Done
+# TODO Spies always fail after 2 missions have failed, will guarantee a win Done
+# TODO Always vote no if not on mission Done
+
+
 class Agent3(Agent): #TODO Rename based on algorithm used
     """
     All players should start with equal chance of being spy, IF resistance in game of 5 players, each other player has a 50% chance of being a spy, 
@@ -17,7 +23,7 @@ class Agent3(Agent): #TODO Rename based on algorithm used
     self.spy_count stores a dict of how many spies are in a game in regards to how many players are in the game, eg a game with 5 players has 2 spies
     """
 
-    def __init__(self, name='BayesAgent1'): # Initialises the agent. # TODO change name
+    def __init__(self, name='Bayes Jond 007'): # Initialises the agent. # TODO change name
         self.name = name
 
     def new_game(self, number_of_players, player_number, spy_list): # I think we can leave as is
@@ -36,6 +42,8 @@ class Agent3(Agent): #TODO Rename based on algorithm used
         self.worlds = {} # Stores the worlds and their probabilities, will be updated as the game progresses
         self.probabilities = {} # Stores probabilities of players being a spy, to be used to add to calculate probabilities result
         self.votecount = 0
+        self.mission_Number = 0 # The index of the current mission number, for indentifying how many betrayals are required
+        self.spy_score = 0 # The number of points that the spies have, 3 == win for spies
         
         # #if self.name == "TEST": print(number_of_players)
         # #if self.name == "TEST": print(player_number)
@@ -184,11 +192,17 @@ class Agent3(Agent): #TODO Rename based on algorithm used
 
         # Always decline mission if you are not in it
         # As resistance, this is the best play as it reduces the chance of getting a spy
-        if not self.is_spy:
-            if self.player_number not in mission:
-                return False
+        # TODO replace with checking if a spy has to be on the mission
+        # if not self.is_spy():
+        #     if self.player_number not in mission:
+        #         return False
+        
 
         if not self.is_spy(): # If Resistance, deny missions with suspicious proposers or mission members
+            if len(mission) == (self.number_of_players - self.spy_count[self.number_of_players]) and self.player_number not in mission:
+                return False
+            if probabilities.get(proposer) == 0: 
+                return True
             if probabilities.get(proposer) > average: # If the proposer is in the top "number of spies" index of the suspicion list, deny mission
                 #if self.name == "TEST": print("I am voting no, proposer bad")
                 return False
@@ -241,6 +255,7 @@ class Agent3(Agent): #TODO Rename based on algorithm used
     def betray(self, mission, proposer): # Beware of betraying if already have or other spies on the same team
         # Could calculate if betrayal would increase the agents suspicion to bad levels
         # If number of spies in the mission is less than required to betray the mission, do not betray
+        # TODO Dont betray of more than enough spies to fail the mission DONE
         '''
         mission is a list of agents to be sent on a mission. 
         The agents on the mission are distinct and indexed between 0 and number_of_players, and include this agent.
@@ -248,8 +263,21 @@ class Agent3(Agent): #TODO Rename based on algorithm used
         The method should return True if this agent chooses to betray the mission, and False otherwise. 
         By default, spies will betray 30% of the time. 
         '''
+        # Currently only fails mission if there is enough spies in the mission to successfully fail, so missions that require 2 fails but only 1 spy are not failed
+        Spies_in_mission = 0
+        for x in mission:
+            if x in self.spy_list:
+                Spies_in_mission += 1
         if self.is_spy():
-            return True
+            if self.spy_score == 2 and self.fails_required[self.number_of_players][self.mission_Number-1] <= Spies_in_mission:
+                return True
+            # if self.fails_required[self.number_of_players][self.mission_Number-1] == Spies_in_mission:
+            if self.fails_required[self.number_of_players][self.mission_Number-1] <= Spies_in_mission:
+                return True
+            else:
+                return False
+        else:
+            return False
 
     def mission_outcome(self, mission, proposer, betrayals, mission_success):
         # Update internal perception of players

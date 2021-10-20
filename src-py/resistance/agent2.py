@@ -35,6 +35,7 @@ class Agent2(Agent): #TODO Rename based on algorithm used
         self.spy_list = spy_list # The list of spy indexes, empty if the agent is not a spy
         self.worlds = {} # Stores the worlds and their probabilities, will be updated as the game progresses
         self.probabilities = {} # Stores probabilities of players being a spy, to be used to add to calculate probabilities result
+        self.mission_Number = 0 # The index of the current mission number, for indentifying how many betrayals are required
         
         # #if self.name == "TEST": print(number_of_players)
         # #if self.name == "TEST": print(player_number)
@@ -130,7 +131,7 @@ class Agent2(Agent): #TODO Rename based on algorithm used
         if self.is_spy(): # If the agent is a spy, choose a team most likely to pass the vote, but still contain a spy
             spiesSelected = 0
             for x in range(len(probabilities)-1, 0, -1): # looping backwards over the list, find the first spy (least suspicious, and add them to the team)
-                if probabilities[x] in self.spy_list and spiesSelected < betrayals_required and probabilities[x] != self.player_number: # Check that least suspicious player is not the agent, and that the number of spies selected is less than the number of spies required
+                if probabilities[x] in self.spy_list and spiesSelected < betrayals_required: # Check that least suspicious player is not the agent, and that the number of spies selected is less than the number of spies required
                     team.append(probabilities[x])
                     spiesSelected += 1 # Increment the number of spies selected, If the number of spies selected is equal to the number of betrayals required, then do not select more spies
             for x in range(team_size - spiesSelected+1): # for the remaining number of players required, add the next least suspicious players to the team, more likely to suceed vote
@@ -223,8 +224,19 @@ class Agent2(Agent): #TODO Rename based on algorithm used
         The method should return True if this agent chooses to betray the mission, and False otherwise. 
         By default, spies will betray 30% of the time. 
         '''
+        # Currently only fails mission if there is enough spies in the mission to successfully fail, so missions that require 2 fails but only 1 spy are not failed
+        Spies_in_mission = 0
+        for x in mission:
+            if x in self.spy_list:
+                Spies_in_mission += 1
         if self.is_spy():
-            return True
+            if self.fails_required[self.number_of_players][self.mission_Number-1] <= Spies_in_mission:
+                return True
+            else:
+                return False
+            # return True
+        else:
+            return False
 
     def mission_outcome(self, mission, proposer, betrayals, mission_success):
         # Update internal perception of players
