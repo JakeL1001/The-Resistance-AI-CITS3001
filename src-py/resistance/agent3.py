@@ -23,7 +23,7 @@ class Agent3(Agent): #TODO Rename based on algorithm used
     self.spy_count stores a dict of how many spies are in a game in regards to how many players are in the game, eg a game with 5 players has 2 spies
     """
 
-    def __init__(self, name='BayesAgent1'): # Initialises the agent. # TODO change name
+    def __init__(self, name='Bayes Jond 007'): # Initialises the agent. # TODO change name
         self.name = name
 
     def new_game(self, number_of_players, player_number, spy_list): # I think we can leave as is
@@ -148,7 +148,7 @@ class Agent3(Agent): #TODO Rename based on algorithm used
                     team.append(probabilities[x])
                     spiesSelected += 1 # Increment the number of spies selected, If the number of spies selected is equal to the number of betrayals required, then do not select more spies
             for x in range(team_size - spiesSelected+1): # for the remaining number of players required, add the next least suspicious players to the team, more likely to suceed vote
-                if probabilities[x] not in self.spy_list and len(team) < team_size + 1:
+                if probabilities[x] not in self.spy_list and len(team) < team_size + 1 and probabilities[x] != self.player_number:
                     team.append(probabilities[x])
         else: # If the agent is not a spy, choose a team with the least suspicion, least chance of containing a spy
             probabilities.reverse() # Reverse the list so that the first element is the least likely to be a spy

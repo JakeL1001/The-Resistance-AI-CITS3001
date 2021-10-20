@@ -119,7 +119,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         if self.is_spy(): # If the agent is a spy, choose a team most likely to pass the vote, but still contain a spy
             spiesSelected = 0
             for x in range(len(probabilities)-1, 0, -1): # looping backwards over the list, find the first spy (least suspicious, and add them to the team)
-                if probabilities[x] in self.spy_list and spiesSelected < betrayals_required and probabilities[x]: # Check that least suspicious player is not the agent, and that the number of spies selected is less than the number of spies required
+                if probabilities[x] in self.spy_list and spiesSelected < betrayals_required: # Ensure that the number of spies selected is less than the number of spies required
                     team.append(probabilities[x])
                     spiesSelected += 1 # Increment the number of spies selected, If the number of spies selected is equal to the number of betrayals required, then do not select more spies
             for x in range(team_size - spiesSelected+1): # for the remaining number of players required, add the next least suspicious players to the team, more likely to suceed vote
@@ -171,14 +171,14 @@ class Agent1(Agent): #TODO Rename based on algorithm used
                 return True
         else: # If the agent is a spy, pass mission with spys on them, but not too suspicious, as it may incriminate yourself
             #if probabilities.index(proposer) == 0: # If the proposer is the most suspicious player, deny mission
-            if list(probabilities.keys()).index(proposer) < self.spy_count[self.number_of_players] - 1: # If the proposer is more suspicious than average, then vote no
+            if probabilities.get(proposer) > average: # If the proposer is more suspicious than average, then vote no
                 #print("I am voting no, proposer bad, too suspicious1")
                 return False
             else:
                 for x in mission:
                     # if probabilities.index(x) < 2: # if one of the 2 most suspicious players is on the mission, deny mission
                     # if probabilities.index(x) == 0: # if the most suspicious player is on the mission, deny mission
-                    if list(probabilities.keys()).index(proposer) < self.spy_count[self.number_of_players] - 1: # if the most suspicious player is on the mission, deny mission
+                    if probabilities.get(x) > average: # if the most suspicious player is on the mission, deny mission
                         #print("I am voting no, mission bad, too suspicious2")
                         return False
                 if sorted(mission) == sorted(self.spy_list):
@@ -209,7 +209,6 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         The method should return True if this agent chooses to betray the mission, and False otherwise. 
         By default, spies will betray 30% of the time. 
         '''
-        # Currently only fails mission if there is enough spies in the mission to successfully fail, so missions that require 2 fails but only 1 spy are not failed
         return True
 
     def mission_outcome(self, mission, proposer, betrayals, mission_success):
