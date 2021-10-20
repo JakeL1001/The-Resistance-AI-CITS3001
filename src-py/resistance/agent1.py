@@ -119,7 +119,7 @@ class Agent1(Agent): #TODO Rename based on algorithm used
         if self.is_spy(): # If the agent is a spy, choose a team most likely to pass the vote, but still contain a spy
             spiesSelected = 0
             for x in range(len(probabilities)-1, 0, -1): # looping backwards over the list, find the first spy (least suspicious, and add them to the team)
-                if probabilities[x] in self.spy_list and spiesSelected < betrayals_required and probabilities[x] != self.player_number: # Check that least suspicious player is not the agent, and that the number of spies selected is less than the number of spies required
+                if probabilities[x] in self.spy_list and spiesSelected < betrayals_required and probabilities[x]: # Check that least suspicious player is not the agent, and that the number of spies selected is less than the number of spies required
                     team.append(probabilities[x])
                     spiesSelected += 1 # Increment the number of spies selected, If the number of spies selected is equal to the number of betrayals required, then do not select more spies
             for x in range(team_size - spiesSelected+1): # for the remaining number of players required, add the next least suspicious players to the team, more likely to suceed vote
