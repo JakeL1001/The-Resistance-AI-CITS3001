@@ -1,7 +1,7 @@
 from random_agent import RandomAgent
 from agent1 import Agent1
 from agent2 import Agent2
-from agent3 import Agent3
+from BayesJond import BayesJond
 from game import Game
 import random
 import pandas as pd
@@ -26,17 +26,17 @@ from multiprocessing import Process
 #         RandomAgent(name='r5'),  
 #         RandomAgent(name='r6'),  
 #         RandomAgent(name='r7'),
-#         Agent3(name="r8")]
+#         BayesJond(name="r8")]
 
 
-# agents = [Agent3(name='r1'), 
-#         Agent3(name='r2'),  
-#         Agent3(name='r3'),  
+# agents = [BayesJond(name='r1'), 
+#         BayesJond(name='r2'),  
+#         BayesJond(name='r3'),  
 #         # RandomAgent(name='r4'),  
-#         Agent3(name='r5'),  
-#         Agent3(name='r6'),  
-#         Agent3(name='r7'),
-#         Agent3(name="TEST")]
+#         BayesJond(name='r5'),  
+#         BayesJond(name='r6'),  
+#         BayesJond(name='r7'),
+#         BayesJond(name="TEST")]
 
 
 # agents = [Agent1(name='r1'), 
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         df = pd.DataFrame(list())
         df.to_csv('outcomes.csv')
 
-        NO_GAMES = 1000
+        NO_GAMES = 100
 
         # processes = []
         # for i in range(5,11): # Runs 6 processes, each testing a different number of agents (DIFFERENT NUMBER OF PLAYERS NOT YET IMPLEMENTED)
@@ -94,7 +94,7 @@ if __name__ == "__main__":
         #         agents = []
         #         for x in range(1,p):
         #                 agents.append(RandomAgent(name="r{}".format(str(x))))
-        #         agents.append(Agent3(name="TEST"))
+        #         agents.append(BayesJond(name="TEST"))
         #         random.shuffle(agents)
         #         print(agents)
         #         for i in range(NO_GAMES):
@@ -139,7 +139,7 @@ if __name__ == "__main__":
                         if p % 2 == 0:
                                 print(p)
                         agents = x[:p-1]
-                        agents.append(Agent3(name="TEST"))
+                        agents.append(BayesJond(name="TEST"))
                         print(agents)
                         random.shuffle(x)
                         for i in range(NO_GAMES):
