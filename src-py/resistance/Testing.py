@@ -7,68 +7,27 @@ import random
 import pandas as pd
 from multiprocessing import Process
 
+def loopgames(subject, opponentstring, x, opponents, games):
+    print("Testing " + subject + " against " + opponentstring + " with " + str(x) + " agents")
+    if opponentstring == "Combination": # Randomizes the combination of agents
+        random.shuffle(opponents)
+    agents = opponents[:x-1]
+    agents.append(eval(subject)(name=subject + opponentstring)) # Adds the subject to the agents list
+    for i in range(games): # Tests each combination 20,000 times
+        game = Game(agents)
+        game.play()
 
-# agents = [RandomAgent(name='r1'), 
-#         RandomAgent(name='r2'),  
-#         RandomAgent(name='r3'),  
-#         # RandomAgent(name='r4'),  
-#         RandomAgent(name='r5'),  
-#         RandomAgent(name='r6'),  
-#         RandomAgent(name='r7'),
-#         Agent1(name="TEST")]
-
-
-
-# agents = [Agent1(name='TEST'), 
-#         Agent2(name='r2'),  
-#         RandomAgent(name='r3'),  
-#         # RandomAgent(name='r4'),  
-#         RandomAgent(name='r5'),  
-#         RandomAgent(name='r6'),  
-#         RandomAgent(name='r7'),
-#         BayesJond(name="r8")]
-
-
-# agents = [BayesJond(name='r1'), 
-#         BayesJond(name='r2'),  
-#         BayesJond(name='r3'),  
-#         # RandomAgent(name='r4'),  
-#         BayesJond(name='r5'),  
-#         BayesJond(name='r6'),  
-#         BayesJond(name='r7'),
-#         BayesJond(name="TEST")]
-
-
-# agents = [Agent1(name='r1'), 
-#         Agent1(name='r2'),  
-#         Agent1(name='r3'),  
-#         # RandomAgent(name='r4'),  
-#         Agent1(name='r5'),  
-#         Agent1(name='r6'),  
-#         BasicBayes(name='r7'),
-#         BasicBayes(name="TEST")]
-
-# agents = [Agent2(name='r1'), 
-#         Agent2(name='r2'),  
-#         Agent2(name='r3'),  
-#         # RandomAgent(name='r4'),  
-#         Agent2(name='r5'),  
-#         Agent2(name='r6'),  
-#         Agent2(name='r7'),
-#         Agent2(name="TEST")]        
-
-# game = Game(agents)
-# game.play()
-# print(game.missions_lost)
-agents = [RandomAgent(name='r1'), 
-                RandomAgent(name='r2'),  
-                RandomAgent(name='r3'),  
-                # RandomAgent(name='r4'),  
-                RandomAgent(name='r5'),  
-                RandomAgent(name='r6'),  
-                RandomAgent(name='r7'),
-                BasicBayes(name="TEST")]
-
+def loopgames2(opponentstringtolist, opponentstring, games, subject):
+    opponents = opponentstringtolist[opponentstring]
+    for x in range(5,11): # Tests game size between 5 and 10 inclusive
+        print("Testing " + subject + " against " + opponentstring + " with " + str(x) + " agents")
+        if opponentstring == "Combination": # Randomizes the combination of agents
+            random.shuffle(opponents)
+        agents = opponents[:x-1]
+        agents.append(eval(subject)(name=subject + opponentstring)) # Adds the subject to the agents list
+        for i in range(games): # Tests each combination 20,000 times
+            game = Game(agents)
+            game.play()
 
 if __name__ == "__main__":
     Basic = [BasicBayes(name='basic1'),
@@ -116,20 +75,39 @@ if __name__ == "__main__":
     # opponentlisttostring = {Random: "Random", Basic: "Basic", Jond: "Jond", Combination: "Combination"}
     opponentstringtolist = {'Random': Random, 'Basic': Basic, 'Jond': Jond, 'Combination': Combination}
     
-    games = 1
+    games = 20000
     
+    # for subject in agentsToTest: #Tests BasicBayes and BayesJond
+    #     for opponentstring in opponentstringtolist: # Tests against Random, Basic, Jond, and Combination
+    #         opponents = opponentstringtolist[opponentstring]
+    #         for x in range(5,11): # Tests game size between 5 and 10 inclusive
+    #             print("Testing " + subject + " against " + opponentstring + " with " + str(x) + " agents")
+    #             if opponentstring == "Combination": # Randomizes the combination of agents
+    #                 random.shuffle(opponents)
+    #             agents = opponents[:x-1]
+    #             agents.append(eval(subject)(name=subject + opponentstring)) # Adds the subject to the agents list
+    #             for i in range(games): # Tests each combination 20,000 times
+    #                 game = Game(agents)
+    #                 game.play()
+
     for subject in agentsToTest: #Tests BasicBayes and BayesJond
+        processes = []
         for opponentstring in opponentstringtolist: # Tests against Random, Basic, Jond, and Combination
-            opponents = opponentstringtolist[opponentstring]
-            for x in range(5,11): # Tests game size between 5 and 10 inclusive
-                print("Testing " + subject + " against " + opponentstring + " with " + str(x) + " agents")
-                if opponentstring == "Combination": # Randomizes the combination of agents
-                    random.shuffle(opponents)
-                agents = opponents[:x-1]
-                agents.append(eval(subject)(name=subject + opponentstring)) # Adds the subject to the agents list
-                for i in range(games): # Tests each combination 20,000 times
-                    game = Game(agents)
-                    game.play()
+            p = Process(target=loopgames2, args=(opponentstringtolist, opponentstring, games, subject))
+            processes.append(p)
+            p.start()
+        for p in processes:
+            p.join()
+
+# def loopgames2(opponentstringtolist, opponentstring, games, subject):
+        # processes = []
+        # for i in range(5,11): # Runs 6 processes, each testing a different number of agents (DIFFERENT NUMBER OF PLAYERS NOT YET IMPLEMENTED)
+        #         print(i)
+        #         p = Process(target=loopgames, args=(NO_GAMES,))
+        #         processes.append(p)
+        #         p.start()
+        # for p in processes:
+        #         p.join()
 
 
         # df = pd.read_csv('outcomes.csv')
