@@ -7,9 +7,6 @@ class BasicBayes(Agent):
     self.worlds stores a dictionary of all possible worlds, where each key is a tuple of the a combinations players in the world, 
                 assuming the players of whose names are in the tuple are both spies, and the value is the likelihood of that world being the real world.
                 eg. if (1,2): 0.4, then there is a 40% chance of the real world having players 1 and 2 as spies.
-    self.number_of_players stores an int of the number of players in the game
-    self.player_number stores an int of the player number of this agent
-    self.spy_list stores a list of ints of the player indexes of the spies in the game
     self.spy_count stores a dict of how many spies are in a game in regards to how many players are in the game, eg a game with 5 players has 2 spies
     """
 
@@ -33,33 +30,26 @@ class BasicBayes(Agent):
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
                     if not self.is_spy() and x == self.player_number or y == self.player_number:
-                        self.worlds[(x,y)] = "INVALID" # Used to remove worlds in which the player is a spy, as they are not needed to be accounted for
+                        pass # Used to ignore worlds in which the player is a spy, as they do not need to be accounted for
                     else:
-                        self.worlds[(x,y)] = "VALID"
+                        self.worlds[(x,y)] = 0
         elif self.spy_count[number_of_players] == 3: # Creates the worlds for a game of 3 spies
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
                     for z in range(y+1, number_of_players):
                         if not self.is_spy() and (x == self.player_number or y == self.player_number or z == self.player_number):
-                            self.worlds[(x,y,z)] = "INVALID"
+                            pass
                         else:
-                            self.worlds[(x,y,z)] = "VALID"
+                            self.worlds[(x,y,z)] = 0
         elif self.spy_count[number_of_players] == 4: # Creates the worlds for a game of 4 spies
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
                     for z in range(y+1, number_of_players):
                         for w in range(z+1, number_of_players):
                             if not self.is_spy() and (x == self.player_number or y == self.player_number or z == self.player_number or w == self.player_number):
-                                self.worlds[(x,y,z,w)] = "INVALID"
+                                pass
                             else:
-                                self.worlds[(x,y,z,w)] = "VALID"
-
-        # update the list of worlds to remove invalid worlds
-        temp = self.worlds.copy()
-        for key, value in self.worlds.items():
-            if value == "INVALID":
-                temp.pop(key) # Delete worlds containing the BasicBayes agent
-        self.worlds = temp.copy()
+                                self.worlds[(x,y,z,w)] = 0
 
         # set the starting chance of a world being true to the same value
         startingChance = 1/len(self.worlds) # Gives each world the same chance of being true, which is 1/number of worlds
@@ -85,7 +75,7 @@ class BasicBayes(Agent):
         total = 0
         for agents, suspicion in orderedProbs.items(): # Loop through each player's suspicion scores
             total += suspicion
-        average = total/len(orderedProbs) # Calculates the average suspicion of all players
+        average = total/len(orderedProbs) # Calculates the average suspicion of all players in the game
         return orderedProbs, average
 
 
@@ -137,8 +127,7 @@ class BasicBayes(Agent):
                     return False
                 return True
 
-    def vote_outcome(self, mission, proposer, votes): # If people voted yes and mission failed, they could be spies, if people voted no and mission failed, they could be resistance
-        # Update internal perception of players,
+    def vote_outcome(self, mission, proposer, votes): 
         '''
         mission is a list of agents to be sent on a mission. 
         The agents on the mission are distinct and indexed between 0 and number_of_players.
@@ -174,7 +163,6 @@ class BasicBayes(Agent):
             total_fail = 0
             # iterate through all the worlds
             for combination in fail_chance:
-                # print(combination)
                 # overlap is the agents in both the mission and current combination
                 overlap = set(combination)&set(mission)
 
@@ -219,7 +207,10 @@ class BasicBayes(Agent):
         spies_win, True iff the spies caused 3+ missions to fail
         spies, a list of the player indexes for the spies.
         '''
-        # Outputs result of each game to csv, used for testing performance of the agent
+        # Outputs result of each game to csv, used for testing performance of the agent.
+        # Commented out from Code for final submission and tournament play
+        pass
+        """
         if self.name == 'BasicBayesRandom':
             if self.is_spy():
                 if spies_win:
@@ -283,4 +274,5 @@ class BasicBayes(Agent):
                 else:
                     with open('BasicBayesCombination.csv','a') as fd:
                         fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
+        """
 
