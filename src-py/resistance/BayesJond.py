@@ -53,7 +53,7 @@ class BayesJond(Agent):
                 for y in range(x+1, number_of_players):
                     for z in range(y+1, number_of_players):
                         for w in range(z+1, number_of_players):
-                            self.worlds[(x,y)] = startingChance
+                            self.worlds[(x,y,z,w)] = startingChance
                             # self.worlds[(x,y,z,w)] = "VALID"
 
 
