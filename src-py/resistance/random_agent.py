@@ -4,7 +4,8 @@ import random
 class RandomAgent(Agent):        
     '''A sample implementation of a random agent in the game The Resistance'''
 
-    def __init__(self, name='Rando'):
+    def __init__(self, name='Random'):
+
         '''
         Initialises the agent.
         Nothing to do here.
@@ -99,7 +100,71 @@ class RandomAgent(Agent):
         spies, a list of the player indexes for the spies.
         '''
         #nothing to do here
-        pass
+        
+        # Outputs result of each game to csv, used for testing performance of the agent
+        if self.name == 'RandomAgentRandom':
+            if self.is_spy():
+                if spies_win:
+                    with open('RandomAgentRandom.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
+                else:
+                    with open('RandomAgentRandom.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
+            else:
+                if spies_win:
+                    with open('RandomAgentRandom.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
+                else:
+                    with open('RandomAgentRandom.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
+                        
+        elif self.name == 'RandomAgentBasic':
+            if self.is_spy():
+                if spies_win:
+                    with open('RandomAgentBasic.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
+                else:
+                    with open('RandomAgentBasic.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
+            else:
+                if spies_win:
+                    with open('RandomAgentBasic.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
+                else:
+                    with open('RandomAgentBasic.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
+        
+        elif self.name == 'RandomAgentJond':
+            if self.is_spy():
+                if spies_win:
+                    with open('RandomAgentJond.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
+                else:
+                    with open('RandomAgentJond.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
+            else:
+                if spies_win:
+                    with open('RandomAgentJond.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
+                else:
+                    with open('RandomAgentJond.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
+        
+        elif self.name == 'RandomAgentCombination':
+            if self.is_spy():
+                if spies_win:
+                    with open('RandomAgentCombination.csv','a') as fd:
+                        fd.write('{} players,I was spy,Won\n'.format(self.number_of_players))
+                else:
+                    with open('RandomAgentCombination.csv','a') as fd:
+                        fd.write('{} players,I was spy,Lost\n'.format(self.number_of_players))
+            else:
+                if spies_win:
+                    with open('RandomAgentCombination.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Lost\n'.format(self.number_of_players))
+                else:
+                    with open('RandomAgentCombination.csv','a') as fd:
+                        fd.write('{} players,I was not spy,Won\n'.format(self.number_of_players))
 
 
 

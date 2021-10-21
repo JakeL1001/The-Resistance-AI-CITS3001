@@ -219,7 +219,7 @@ class BasicBayes(Agent):
         spies_win, True iff the spies caused 3+ missions to fail
         spies, a list of the player indexes for the spies.
         '''
-
+        # Outputs result of each game to csv, used for testing performance of the agent
         if self.name == 'BasicBayesRandom':
             if self.is_spy():
                 if spies_win:

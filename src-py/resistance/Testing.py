@@ -19,6 +19,7 @@ def loopgames(subject, opponentstring, x, opponents, games):
 
 def loopgames2(opponentstringtolist, opponentstring, games, subject):
     opponents = opponentstringtolist[opponentstring]
+    subject = subject + "Agent" # ONLY NEEDED FOR TESTING THE RANDOM AGENT
     for x in range(5,11): # Tests game size between 5 and 10 inclusive
         print("Testing " + subject + " against " + opponentstring + " with " + str(x) + " agents")
         if opponentstring == "Combination": # Randomizes the combination of agents
@@ -70,7 +71,8 @@ if __name__ == "__main__":
                 BasicBayes(name='basic3'),
                 BayesJond(name='jond3'),]
         
-    agentsToTest = ["BasicBayes", "BayesJond"]
+    # agentsToTest = ["BasicBayes", "BayesJond"]
+    agentsToTest = ["Random"]
     opponentlist = [Random, Basic, Jond, Combination]
     # opponentlisttostring = {Random: "Random", Basic: "Basic", Jond: "Jond", Combination: "Combination"}
     opponentstringtolist = {'Random': Random, 'Basic': Basic, 'Jond': Jond, 'Combination': Combination}

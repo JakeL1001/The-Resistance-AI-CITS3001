@@ -27,6 +27,7 @@ class BayesJond(Agent):
         and a list of agent indexes which are the spies, if the agent is a spy, or empty otherwise
         '''
         self.spy_count = {5:2, 6:2, 7:3, 8:3, 9:3, 10:4} # Returns the number of spies in a game of a relavent size eg a game with 9 players, self.spy_count[9] returns 3
+        self.number_of_worlds = {5:10, 6:15, 7:35, 8:56, 9:84, 10:210}
         self.number_of_players = number_of_players # The number of players in the game
         self.player_number = player_number # The agent's player number
         self.spy_list = spy_list # The list of spy indexes, empty if the agent is not a spy
@@ -35,27 +36,31 @@ class BayesJond(Agent):
         self.mission_Number = 0 # The index of the current mission number, for indentifying how many betrayals are required
         self.spy_score = 0 # The number of points that the spies have, 3 == win for spies
         
+        startingChance = 1/self.number_of_worlds[number_of_players]
         if self.spy_count[number_of_players] == 2: # Creates the worlds for a game of 2 spies
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
-                    self.worlds[(x,y)] = "VALID"
+                    self.worlds[(x,y)] = startingChance
+                    # self.worlds[(x,y)] = "VALID"
         elif self.spy_count[number_of_players] == 3: # Creates the worlds for a game of 3 spies
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
                     for z in range(y+1, number_of_players):
-                        self.worlds[(x,y,z)] = "VALID"
+                        self.worlds[(x,y,z)] = startingChance
+                        # self.worlds[(x,y,z)] = "VALID"
         elif self.spy_count[number_of_players] == 4: # Creates the worlds for a game of 4 spies
             for x in range(number_of_players):
                 for y in range(x+1, number_of_players):
                     for z in range(y+1, number_of_players):
                         for w in range(z+1, number_of_players):
-                            self.worlds[(x,y,z,w)] = "VALID"
+                            self.worlds[(x,y)] = startingChance
+                            # self.worlds[(x,y,z,w)] = "VALID"
 
 
-        # set the starting chance of a world being true to the same value
-        startingChance = 1/len(self.worlds)
-        for key, value in self.worlds.items(): 
-                self.worlds[key] = startingChance
+        # # set the starting chance of a world being true to the same value
+        # startingChance = 1/len(self.worlds)
+        # for key, value in self.worlds.items(): 
+        #         self.worlds[key] = startingChance
 
     def is_spy(self): # returns True iff the agent is a spy
         return self.player_number in self.spy_list
@@ -253,6 +258,7 @@ class BayesJond(Agent):
         spies_win, True iff the spies caused 3+ missions to fail
         spies, a list of the player indexes for the spies.
         '''
+        # Outputs result of each game to csv, used for testing performance of the agent
         if self.name == 'BayesJondRandom':
             if self.is_spy():
                 if spies_win:
