@@ -1,9 +1,9 @@
 import pandas as pd
 
 if __name__ == "__main__":
-    # files = ["BasicBayesBasic.csv", "BasicBayesCombination.csv", "BasicBayesJond.csv", "BasicBayesRandom.csv", 
-    #          "BayesJondBasic.csv", "BayesJondCombination.csv", "BayesJondJond.csv", "BayesJondRandom.csv"]
-    files = ["RandomAgentBasic.csv", "RandomAgentCombination.csv", "RandomAgentJond.csv", "RandomAgentRandom.csv",]
+    files = ["BasicBayesBasic.csv", "BasicBayesCombination.csv", "BasicBayesJond.csv", "BasicBayesRandom.csv", 
+             "BayesJondBasic.csv", "BayesJondCombination.csv", "BayesJondJond.csv", "BayesJondRandom.csv"]
+    # files = ["RandomAgentBasic.csv", "RandomAgentCombination.csv", "RandomAgentJond.csv", "RandomAgentRandom.csv",]
     for x in files:
         print(x)
         df = pd.read_csv(x)
