@@ -2,6 +2,8 @@ import itertools
 from agent import Agent
 import random
 
+# Created by Jake Lyell (22704832) and YiMing Liu (22730325)
+
 
 class BayesJond(Agent):
     """
