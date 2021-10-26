@@ -2,6 +2,11 @@
 An Artificial Intelligence Agent that plays the card game "The Resistance" for CITS3001 Algorithms, Agents and Artificial Intelligence
 By Jake Lyell and YiMing Liu
 
+## Steps to test the agents:
+1. Uncomment the final funciton in the BasicBayes.py and BayesJond.py Agent classes, so that they will print to a csv with the outcomes of their game
+2. Run the Testing.py file, should print in console where in the testing the code is up to. Will take a long time to run with default 20,000 games per type of game, can be reduced for a muchfaster test.
+3. Run the TestAnalysis.py file, will print out the winrates of each of the agents against other teams of agents 
+
 # Description of the Project:
 
 ## resistanceAI
